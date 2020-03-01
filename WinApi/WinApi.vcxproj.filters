@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Clases">
+      <UniqueIdentifier>{c74d3cc0-8564-4f45-9545-27d9e9fe721f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objetos">
+      <UniqueIdentifier>{ec43fb6b-02f7-42d9-9480-3ce2da8235fb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllMain.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="C_WinApi.cpp">
+      <Filter>Clases</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Frame.cpp">
+      <Filter>Objetos</Filter>
+    </ClCompile>
+    <ClCompile Include="Contenedor.cpp">
+      <Filter>Clases</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Objeto.cpp">
+      <Filter>Objetos</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Button.cpp">
+      <Filter>Objetos</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Label.cpp">
+      <Filter>Objetos</Filter>
+    </ClCompile>
+    <ClCompile Include="C_GroupBox.cpp">
+      <Filter>Objetos</Filter>
+    </ClCompile>
+    <ClCompile Include="C_TextBox.cpp">
+      <Filter>Objetos</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Menu.cpp">
+      <Filter>Objetos</Filter>
+    </ClCompile>
+    <ClCompile Include="C_MultiLine.cpp">
+      <Filter>Objetos</Filter>
+    </ClCompile>
+    <ClCompile Include="C_MessageBox.cpp">
+      <Filter>Objetos</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="WinApi.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="C_WinApi.h">
+      <Filter>Clases</Filter>
+    </ClInclude>
+    <ClInclude Include="General.h">
+      <Filter>Clases</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Frame.h">
+      <Filter>Objetos</Filter>
+    </ClInclude>
+    <ClInclude Include="Contenedor.h">
+      <Filter>Clases</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Button.h">
+      <Filter>Objetos</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Objeto.h">
+      <Filter>Objetos</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Label.h">
+      <Filter>Objetos</Filter>
+    </ClInclude>
+    <ClInclude Include="C_GroupBox.h">
+      <Filter>Objetos</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Menu.h">
+      <Filter>Objetos</Filter>
+    </ClInclude>
+    <ClInclude Include="C_TextBox.h">
+      <Filter>Objetos</Filter>
+    </ClInclude>
+    <ClInclude Include="C_MultiLine.h">
+      <Filter>Objetos</Filter>
+    </ClInclude>
+    <ClInclude Include="C_MessageBox.h">
+      <Filter>Objetos</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
