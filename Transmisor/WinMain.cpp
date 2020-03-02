@@ -25,16 +25,28 @@
 // especial para crear proyectos C++																				//
 //******************************************************************************************************************//
 
+//######################################################//
+// TRANSMISOR V 2.0										//
+//######################################################//
+// ULTIMA MODIFICACION DOCUMENTADA                      //
+// 01/03/2020                                           //
+// Creacion                                             //
+//######################################################//
+
 
 #include <Windows.h>	//Obligatorio para DLL
 
 //#include "WinApi.h"
 #include "Frame.h"
 
+#include "P3D.h"
+
 #ifdef _DEBUG
 #pragma comment (lib, "WinApi_d.lib")
+#pragma comment (lib, "P3D_d.lib")
 #else
 #pragma comment (lib, "WinApi.lib")
+#pragma comment (lib, "P3D.lib")
 #endif
 
 
@@ -65,6 +77,19 @@ void Call_Resize() {
 	MultiLineSimu->Set_Pos(X4, 210, Ancho4, Alto);
 }
 
+P3D* Prep3d = New_P3D();
+
+void Call_Conexion() {
+	if (Prep3d->Connect()) {
+		MultiLineGeneral->Add_Line("Conexion establecida");
+	} else {
+		MultiLineGeneral->Add_Line("Conexion no establecida");
+	}
+}
+
+void Call_Desconexion() {
+	Prep3d->Disconnect();
+}
 
 int CALLBACK WINAPI WinMain(
 	_In_ HINSTANCE hInstance,
@@ -75,6 +100,8 @@ int CALLBACK WINAPI WinMain(
 	CrearObjetos(hInstance);
 	Boton_AServidor->Assign_Event_Click(Click);
 	Frame1->Assign_Event_Resize(Call_Resize);
+	Boton_Sim_Conect->Assign_Event_Click(Call_Conexion);
+	Boton_Serie_Desc->Assign_Event_Click(Call_Desconexion);
 	// Loop del programa
 	WinApi->Loop();
 

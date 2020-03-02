@@ -5,30 +5,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Main\Clases">
-      <UniqueIdentifier>{6dcb43ae-a150-4518-9a14-e9d99356ee7e}</UniqueIdentifier>
+    <Filter Include="Clase">
+      <UniqueIdentifier>{f6ddc182-8fe5-400f-ae1e-804324c2df09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllMain.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="P3D_Base.cpp">
-      <Filter>Main\Clases</Filter>
+    <ClCompile Include="C_Archivo.cpp">
+      <Filter>Clase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="P3D.h">
+    <ClInclude Include="Archivo.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="P3D_Base.h">
-      <Filter>Main\Clases</Filter>
-    </ClInclude>
-    <ClInclude Include="Estructuras.h">
-      <Filter>Main\Clases</Filter>
-    </ClInclude>
-    <ClInclude Include="PMDG_NG3_SDK.h">
-      <Filter>Main\Clases</Filter>
+    <ClInclude Include="C_Archivo.h">
+      <Filter>Clase</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
