@@ -178,6 +178,7 @@
     <ClCompile Include="C_Frame.cpp" />
     <ClCompile Include="C_GroupBox.cpp" />
     <ClCompile Include="C_Label.cpp" />
+    <ClCompile Include="C_ListBox.cpp" />
     <ClCompile Include="C_Menu.cpp" />
     <ClCompile Include="C_MessageBox.cpp" />
     <ClCompile Include="C_MultiLine.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="C_Frame.h" />
     <ClInclude Include="C_GroupBox.h" />
     <ClInclude Include="C_Label.h" />
+    <ClInclude Include="C_ListBox.h" />
     <ClInclude Include="C_Menu.h" />
     <ClInclude Include="C_MessageBox.h" />
     <ClInclude Include="C_MultiLine.h" />

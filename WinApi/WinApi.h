@@ -18,6 +18,7 @@ using namespace std;
 class Win_Api {
 public:
 	virtual void Create(HINSTANCE h_Instancia) = 0;
+	virtual void Draw() = 0;
 	virtual int  Loop()  = 0;
 	virtual void Exit()  = 0;
 	// Metodos
@@ -100,6 +101,17 @@ class Win_MessageBox {
 public:
 	virtual int Create(string Titulo, string Message, M_Message Tipo = M_Message::M_OK) = 0;
 };
+// LIST BOX			
+class Win_ListBox {
+public:
+	virtual void	Create(Win_Frame* _Frame, int x, int y, int ancho = 60, int alto = 20) = 0;
+	//virtual string	Get_Text() = 0;
+	//virtual int		Get_Pos_X() = 0;
+	//virtual int		Get_Pos_Y() = 0;
+	//virtual void	Set_Text(string Text) = 0;
+	//virtual void	Set_Pos(int x = -1, int y = -1, int ancho = -1, int alto = -1) = 0;
+	virtual void	Add_Line(string Texto) = 0;
+};
 
 extern DLLIMPORT Win_Api* New_Api();
 extern DLLIMPORT Win_Frame* New_Frame();
@@ -110,3 +122,4 @@ extern DLLIMPORT Win_TextBox* New_TextBox();
 extern DLLIMPORT Win_Menu* New_Menu();
 extern DLLIMPORT Win_MultiLine* New_MultiLine();
 extern DLLIMPORT Win_MessageBox* New_MessageBox();
+extern DLLIMPORT Win_ListBox* New_ListBox();

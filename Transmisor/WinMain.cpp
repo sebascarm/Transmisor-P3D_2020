@@ -102,6 +102,14 @@ int CALLBACK WINAPI WinMain(
 	Frame1->Assign_Event_Resize(Call_Resize);
 	Boton_Sim_Conect->Assign_Event_Click(Call_Conexion);
 	Boton_Serie_Desc->Assign_Event_Click(Call_Desconexion);
+	
+	
+	WinApi->Draw();
+	List->Add_Line("hola1");
+	List->Add_Line("hola2");
+	List->Add_Line("hola3");
+	List->Add_Line("hola4");
+	List->Add_Line("hola5");
 	// Loop del programa
 	WinApi->Loop();
 

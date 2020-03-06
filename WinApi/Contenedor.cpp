@@ -8,6 +8,7 @@
 #include "C_TextBox.h"
 #include "C_Menu.h"
 #include "C_MultiLine.h"
+#include "C_ListBox.h"
 
 int Contenedor::Elementos = 100;
 
@@ -52,6 +53,12 @@ void Contenedor::New_Object(C_MultiLine& _Objeto) {
 	pMultiLine = &_Objeto;
 	this->Tipo = TipoObjeto::T_MULTILINE;
 }
+void Contenedor::New_Object(C_ListBox& _Objeto) {
+	Agregar();
+	pListBox = &_Objeto;
+	this->Tipo = TipoObjeto::T_LISTBOX;
+}
+
 
 //Show Frame													
 void Contenedor::Show() {
@@ -109,10 +116,12 @@ void Contenedor::Draw() {
 	case TipoObjeto::T_MULTILINE:
 		pMultiLine->Draw();
 		break;
+	case TipoObjeto::T_LISTBOX:
+		pListBox->Draw();
+		break;
 	}
 }
 
-//Get ID de los elementos (solo botones por el momento) - sepuede hacer una sola llamada con el elemento id del contenedor
 int Contenedor::Get_ID() {
 	switch (Tipo) {
 	case TipoObjeto::T_BUTTON:
@@ -120,6 +129,10 @@ int Contenedor::Get_ID() {
 		break;
 	case TipoObjeto::T_MENU:
 		return pMenu->ID;
+		break;
+	case TipoObjeto::T_LISTBOX:
+		return pListBox->ID;
+		break;
 	default:
 		return 0;
 	}

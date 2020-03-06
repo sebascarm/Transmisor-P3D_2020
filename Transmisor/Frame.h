@@ -77,6 +77,9 @@ Win_Label* Label12 = New_Label();
 
 Win_Label* Label18 = New_Label();
 
+// Grupo8 (List box)
+Win_ListBox* List = New_ListBox();
+
 //******************************************************************//
 //**** CREAR OBJETOS											****//
 //******************************************************************//
@@ -169,6 +172,9 @@ void CrearObjetos(HINSTANCE hInstance) {
 	MultiLineSerie1->Create(Frame1, "", X2, 210, Ancho2, Alto);
 	MultiLineSerie2->Create(Frame1, "", X3, 210, Ancho3, Alto);
 	MultiLineSimu->Create(Frame1, "", X4, 210, Ancho4, Alto);
+
+	//Gupo 8
+	List->Create(Frame1, 700, 100, 60, 60);
 
 }
 

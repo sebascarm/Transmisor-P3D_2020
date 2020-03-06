@@ -10,12 +10,12 @@ protected:
 	HINSTANCE hInstance;
 	std::string NombreClase;
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	void Start(); // Carga de elementos previo al loop
 	// friends
 	//friend C_Frame;
 
 public:
 	void Create(HINSTANCE hInstance);
+	void Draw();
 	int Loop();
 	void Exit();
 	// Metodos

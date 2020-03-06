@@ -1,5 +1,7 @@
-Transmisor P3D 2020 v1.0.0
+Transmisor P3D 2020 v1.1.0
 =====================
+* 06/02/2020
+    * Winform   (ListBox)
 * 01/02/2020
     * Transmisor    v2.0
     * P3D           v2.0

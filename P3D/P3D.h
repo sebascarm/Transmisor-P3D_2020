@@ -34,6 +34,7 @@ public:
 	virtual bool Connect() = 0;								// return true if conect ok
 	virtual void Disconnect() = 0;
 	virtual void ScreenMessage(std::string Message) = 0;	// to send message to the P3D Screen
+	virtual void ListBoardSimu() = 0;						// return list of elemento from board to simulator
 };
 
 extern DLLIMPORT P3D* New_P3D();

@@ -7,7 +7,8 @@ enum class TipoObjeto {
 	T_TEXTBOX,
 	T_MENU,
 	T_LABEL,
-	T_GROUPBOX
+	T_GROUPBOX,
+	T_LISTBOX
 };
 
 enum class W_Align {

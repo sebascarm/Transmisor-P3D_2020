@@ -5,6 +5,7 @@
 #include "C_TextBox.h"
 #include "C_Menu.h"
 #include "C_MultiLine.h"
+#include "C_ListBox.h"
 
 #include <vector>
 #include "Contenedor.h"
@@ -53,6 +54,13 @@ void C_Objeto::Contener(C_MultiLine& Objeto) {
 	CONTENEDOR[Elemento].New_Object(Objeto);
 	ID = CONTENEDOR[Elemento].Element_ID;
 }
+void C_Objeto::Contener(C_ListBox& Objeto) {
+	Elemento = CONTENEDOR.size();
+	CONTENEDOR.resize(Elemento + 1);
+	CONTENEDOR[Elemento].New_Object(Objeto);
+	ID = CONTENEDOR[Elemento].Element_ID;
+}
+
 // Solo el menu difiere
 void C_Objeto::Contener(C_Menu& Objeto, int Elementos) {
 	Elemento = CONTENEDOR.size();
@@ -152,4 +160,7 @@ Win_Menu* New_Menu() {
 }
 Win_MultiLine* New_MultiLine() {
 	return new C_MultiLine();
+}
+Win_ListBox* New_ListBox() {
+	return new C_ListBox();
 }

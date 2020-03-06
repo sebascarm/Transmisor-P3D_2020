@@ -51,7 +51,7 @@ HINSTANCE C_WinApi::Get_Instance(){
 	return hInstance;
 }
 
-void C_WinApi::Start() {
+void C_WinApi::Draw() {
 	//Dibujamos solo todos los frame creados (sin mostrarlos)
 	int Elemento = (int)CONTENEDOR.size();
 	for (int i = 0; i < Elemento; i++) {
@@ -82,7 +82,9 @@ LRESULT CALLBACK C_WinApi::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 	//static WindowsMessageMap mm;							
 	//OutputDebugString(mm(msg, lParam, wParam).c_str());	
 	
-	int Elemento = (int)CONTENEDOR.size();
+	int ID = LOWORD(wParam);
+	int Elementos = (int)CONTENEDOR.size();
+	
 	switch (msg) {
 	//	Crear controles		//								
 	case WM_CREATE:
@@ -94,7 +96,7 @@ LRESULT CALLBACK C_WinApi::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 		break;
 	// CAMBIAR COLOR DE FONDOS DE TODOS LOS LABELS			
 	case WM_CTLCOLORSTATIC: {
-		for (int i = 0; i < Elemento; i++) {
+		for (int i = 0; i < Elementos; i++) {
 			if (CONTENEDOR[i].Tipo == TipoObjeto::T_LABEL) {
 				return (LRESULT)CONTENEDOR[i].ColorEdit(wParam); // devuelve el pincel modificado
 			}
@@ -103,19 +105,29 @@ LRESULT CALLBACK C_WinApi::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 	}
 	// RECEPCION DE COMANDOS								
 	case WM_COMMAND: {
-		for (int i = 0; i < Elemento; i++) {
+		for (int i = 0; i < Elementos; i++) {
 			//Envio de click a botones						
 			if (CONTENEDOR[i].Tipo == TipoObjeto::T_BUTTON) {
 				// Buscamos el boton que recibe el evento	
-				if (CONTENEDOR[i].Get_ID() == LOWORD(wParam))
+				if (CONTENEDOR[i].Get_ID() == ID)
 					CONTENEDOR[i].pButton->Event_Click();		// Enviamos el evento 
 			}
 			// Envio de click a Menu						
 			if (CONTENEDOR[i].Tipo == TipoObjeto::T_MENU) {
 				//Recorremos los elementos del menu			
 				for (int j = 0; j < CONTENEDOR[i].pMenu->V_ID.size(); j++) {
-					if (CONTENEDOR[i].pMenu->V_ID[j] == LOWORD(wParam))
+					if (CONTENEDOR[i].pMenu->V_ID[j] == ID)
 						CONTENEDOR[i].pMenu->Event_Click(wParam);
+				}
+			}
+			// List box										
+			if (CONTENEDOR[i].Tipo == TipoObjeto::T_LISTBOX) {
+				// Buscamos el list que recibe el evento	
+				if (CONTENEDOR[i].Get_ID() == ID) {
+					// Buscamos el evento					
+					if (LBN_SELCHANGE == HIWORD(wParam)) {
+						
+					}
 				}
 			}
 		}
@@ -124,7 +136,7 @@ LRESULT CALLBACK C_WinApi::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 	//CAMBIO DE TAMAÑO										
 	case WM_SIZE: {
 		//Envio resize										
-		for (int i = 0; i < Elemento; i++) {
+		for (int i = 0; i < Elementos; i++) {
 			if (CONTENEDOR[i].Tipo == TipoObjeto::T_FRAME) {
 				//Revisamos que sea la ventana que recive el event			
 				if (CONTENEDOR[i].Get_hWnd() == hWnd) {
@@ -143,8 +155,6 @@ LRESULT CALLBACK C_WinApi::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 //*** LOOP									***
 //*********************************************
 int C_WinApi::Loop() {
-	Start();
-	
 	MSG msg;
 	BOOL Result;
 	while ((Result = GetMessage(&msg, nullptr, 0, 0)) > 0) {
