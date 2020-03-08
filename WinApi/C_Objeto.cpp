@@ -88,6 +88,27 @@ void C_Objeto::Draw() {
 	SendMessage(hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
 }
 
+// Fuente		
+void C_Objeto::Set_Font(string Fuente) {
+	hFont = CreateFont(
+		14,						// Alto
+		0,						// Ancho promedio
+		0,						// Angulo de escapement
+		0,						// Linea base de angulo de orientacion
+		FW_DONTCARE,			// Ancho
+		FALSE,					// Italic
+		FALSE,					// Subrrayado
+		FALSE,					// Strikeout
+		DEFAULT_CHARSET,		// Character set identifier
+		OUT_OUTLINE_PRECIS,		// Output precision
+		CLIP_DEFAULT_PRECIS,	// Clipping precision 
+		CLEARTYPE_QUALITY,		// Output quality
+		DEFAULT_PITCH,			// pitch and family
+		TEXT(Fuente.c_str()));	// Fuente
+
+	SendMessage(hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+}
+
 //Color de fondo
 HBRUSH C_Objeto::ColorEdit(WPARAM& wParam) {
 	//Fondo del texto
@@ -97,6 +118,7 @@ HBRUSH C_Objeto::ColorEdit(WPARAM& wParam) {
 	return pincel;
 
 }
+
 
 //*********************************************
 //*** PROPIEDADES COMUNES					***

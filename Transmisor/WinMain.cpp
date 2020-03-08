@@ -38,16 +38,19 @@
 
 //#include "WinApi.h"
 #include "Frame.h"
-
 #include "P3D.h"
+#include "Funciones.h"
 
 #ifdef _DEBUG
 #pragma comment (lib, "WinApi_d.lib")
 #pragma comment (lib, "P3D_d.lib")
+#pragma comment (lib, "Funciones_d.lib")
 #else
 #pragma comment (lib, "WinApi.lib")
 #pragma comment (lib, "P3D.lib")
+#pragma comment (lib, "Funciones.lib")
 #endif
+
 
 
 void Click() {
@@ -85,10 +88,22 @@ void Call_Conexion() {
 	} else {
 		MultiLineGeneral->Add_Line("Conexion no establecida");
 	}
+
+
+	
+	
+
 }
 
 void Call_Desconexion() {
 	Prep3d->Disconnect();
+}
+
+void Call_List() {
+	//string text;
+	//text = List->Get_Text();
+	//OutputDebugString(text.c_str());
+	OutputDebugString("\n");
 }
 
 int CALLBACK WINAPI WinMain(
@@ -103,14 +118,35 @@ int CALLBACK WINAPI WinMain(
 	Boton_Sim_Conect->Assign_Event_Click(Call_Conexion);
 	Boton_Serie_Desc->Assign_Event_Click(Call_Desconexion);
 	
+	ListBoardSimu->Set_Font("Courier new");
+	ListSimuBoard->Set_Font("Courier new");
+
 	
 	WinApi->Draw();
-	List->Add_Line("hola1");
-	List->Add_Line("hola2");
-	List->Add_Line("hola3");
-	List->Add_Line("hola4");
-	List->Add_Line("hola5");
+	//List->Add_Line("hola1");
 	// Loop del programa
+	
+	//List->Assign_Event_ChangeCell(Call_List);
+
+	std::vector <EST_BOARD_SIMU> vBs;
+	vBs = Prep3d->Get_Board_Simu();
+	for (int i = 0; i < vBs.size(); i++) {
+		string ID = to_string(vBs[i].ID);
+		string Board = vBs[i].Board;
+		string Simu = vBs[i].Simu;
+		ListBoardSimu->Add_Line(ID + " - " + Board + " -> " + Simu);
+	}
+
+	std::vector <EST_SIMU_BOARD> vSb;
+	vSb = Prep3d->Get_Simu_Board();
+	for (int i = 0; i < vSb.size(); i++) {
+		string Simu = vSb[i].Simu;
+		string Board = vSb[i].Board;
+		Funciones::RedimSTR(Simu, 30);
+		ListSimuBoard->Add_Line(Simu + " -> " + Board);
+	}
+
+	
 	WinApi->Loop();
 
 }

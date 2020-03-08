@@ -31,17 +31,28 @@ namespace Funciones {
 			return !std::isspace(ch);
 			}));
 	}
-	// trim from end (in place)
+	// trim from end (in place)						
 	void Rtrim(string& Texto) {
 		Texto.erase(std::find_if(Texto.rbegin(), Texto.rend(), [](int ch) {
 			return !std::isspace(ch);
 			}).base(), Texto.end());
 	}
-	// trim from both ends (in place)
+	// trim from both ends (in place)				
 	void Trim(string& Texto) {
 		Ltrim(Texto);
 		Rtrim(Texto);
 	}
+	// Redimencionar texto, completando con espacios
+	void RedimSTR(std::string& Texto, int size){
+		int largo = Texto.length();
+		if (largo > size) {
+			Texto =  Texto.substr(0, size);
+		} else if (largo < size) {
+			Texto = Texto + string((size-largo), ' ');
+		}
+	}
+
+
 
 	// Convert a wide Unicode string to an UTF8 string
 	string utf8_encode(const wstring& wstr) {
@@ -160,7 +171,7 @@ namespace Funciones {
 		PosIni = Data.find("//");
 		while (PosIni >= 0) {
 			PosFin = Data.find("\n", PosIni);
-			if (PosFin == -1) { PosFin = Data.size(); }  // No hay enter, ultima linea
+			if (PosFin == -1) { PosFin = Data.size() - 1; }  // No hay enter, ultima linea
 			Texto1 = Data.substr(0, PosIni);
 			Texto2 = Data.substr(PosFin + 1);
 			Data = Texto1 + Texto2;

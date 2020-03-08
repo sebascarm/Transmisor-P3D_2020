@@ -1,8 +1,9 @@
 //######################################################//
-// P3D V 2.0											//
+// P3D V 2.1											//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 01/03/2020                                           //
+// 08/03/2020                                           //
+// Obtener vectores										//
 // Creacion                                             //
 //######################################################//
 
@@ -26,15 +27,31 @@
 
 
 #include <Windows.h>	
-#include <string>		
+#include <string>	
+#include <vector>
 using namespace std;	
+
+
+struct EST_BOARD_SIMU {
+	int ID;
+	string Board;
+	string Simu;
+};
+
+struct EST_SIMU_BOARD {
+	string Simu;
+	string Board;
+};
+
 
 class P3D {
 public:
 	virtual bool Connect() = 0;								// return true if conect ok
 	virtual void Disconnect() = 0;
 	virtual void ScreenMessage(std::string Message) = 0;	// to send message to the P3D Screen
-	virtual void ListBoardSimu() = 0;						// return list of elemento from board to simulator
+	//virtual void ListBoardSimu() = 0;						// return list of elemento from board to simulator
+	virtual std::vector <EST_BOARD_SIMU> Get_Board_Simu() = 0;
+	virtual std::vector <EST_SIMU_BOARD> Get_Simu_Board() = 0;
 };
 
 extern DLLIMPORT P3D* New_P3D();

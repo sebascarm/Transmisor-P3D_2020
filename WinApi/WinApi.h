@@ -1,3 +1,12 @@
+//######################################################//
+// WIN API v2.1											//
+//######################################################//
+// ULTIMA MODIFICACION DOCUMENTADA                      //
+// 08/03/2020                                           //
+// ListBox v2.0											//
+// Creacion                                             //
+//######################################################//
+
 #pragma once
 
 #ifdef BUILDING_DLL
@@ -105,12 +114,15 @@ public:
 class Win_ListBox {
 public:
 	virtual void	Create(Win_Frame* _Frame, int x, int y, int ancho = 60, int alto = 20) = 0;
-	//virtual string	Get_Text() = 0;
-	//virtual int		Get_Pos_X() = 0;
-	//virtual int		Get_Pos_Y() = 0;
-	//virtual void	Set_Text(string Text) = 0;
-	//virtual void	Set_Pos(int x = -1, int y = -1, int ancho = -1, int alto = -1) = 0;
+	virtual string	Get_Text() = 0;
+	virtual int		Get_Pos_X() = 0;
+	virtual int		Get_Pos_Y() = 0;
+	virtual int		Get_Row()	= 0;
+	virtual void	Set_Font(string Fuente) = 0;
+	virtual void	Set_Pos(int x = -1, int y = -1, int ancho = -1, int alto = -1) = 0;
 	virtual void	Add_Line(string Texto) = 0;
+	// Asignacion de evento				
+	virtual void	Assign_Event_ChangeCell(void(*Function)()) = 0;
 };
 
 extern DLLIMPORT Win_Api* New_Api();

@@ -3,6 +3,7 @@
 
 #include "C_Button.h"
 #include "C_Menu.h"
+#include "C_ListBox.h"
 
 extern std::vector <Contenedor> CONTENEDOR;
 
@@ -106,13 +107,13 @@ LRESULT CALLBACK C_WinApi::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 	// RECEPCION DE COMANDOS								
 	case WM_COMMAND: {
 		for (int i = 0; i < Elementos; i++) {
-			//Envio de click a botones						
+			// **** Envio de click a botones				
 			if (CONTENEDOR[i].Tipo == TipoObjeto::T_BUTTON) {
 				// Buscamos el boton que recibe el evento	
 				if (CONTENEDOR[i].Get_ID() == ID)
 					CONTENEDOR[i].pButton->Event_Click();		// Enviamos el evento 
 			}
-			// Envio de click a Menu						
+			// **** Envio de click a Menu					
 			if (CONTENEDOR[i].Tipo == TipoObjeto::T_MENU) {
 				//Recorremos los elementos del menu			
 				for (int j = 0; j < CONTENEDOR[i].pMenu->V_ID.size(); j++) {
@@ -120,13 +121,14 @@ LRESULT CALLBACK C_WinApi::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 						CONTENEDOR[i].pMenu->Event_Click(wParam);
 				}
 			}
-			// List box										
+			// **** List box								
 			if (CONTENEDOR[i].Tipo == TipoObjeto::T_LISTBOX) {
 				// Buscamos el list que recibe el evento	
 				if (CONTENEDOR[i].Get_ID() == ID) {
 					// Buscamos el evento					
 					if (LBN_SELCHANGE == HIWORD(wParam)) {
-						
+						// Cambio de celda					
+						CONTENEDOR[i].pListBox->Event_ChangeCell();
 					}
 				}
 			}

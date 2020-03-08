@@ -1,8 +1,9 @@
 //######################################################//
-// FUNCIONES V 1.0 (sin cambios con win2019)            //
+// FUNCIONES V 1.1							            //
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 01/03/2020                                           //
+// 08/03/2020                                           //
+// Funcin RedimSTR                                      //
 // Creacion                                             //
 //######################################################//
 
@@ -29,6 +30,7 @@ namespace Funciones {
 	DLLIMPORT void Ltrim(std::string& Texto);
 	DLLIMPORT void Rtrim(std::string& Texto);
 	DLLIMPORT void Trim(std::string& Texto);
+	DLLIMPORT void RedimSTR(std::string& Texto, int size);	// Redimenciona un string completando con espacios o truncando
 	//Conversion de codificacion (sOLO FUNCIONA EN EL MISMO EJECUTABLE)
 	DLLIMPORT std::string utf8_encode(const wstring& wstr);
 	DLLIMPORT wstring utf8_decode(const std::string& str);

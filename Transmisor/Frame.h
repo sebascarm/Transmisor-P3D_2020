@@ -78,7 +78,9 @@ Win_Label* Label12 = New_Label();
 Win_Label* Label18 = New_Label();
 
 // Grupo8 (List box)
-Win_ListBox* List = New_ListBox();
+Win_GroupBox* GroupBox5 = New_GroupBox();
+Win_ListBox* ListBoardSimu = New_ListBox();
+Win_ListBox* ListSimuBoard = New_ListBox();
 
 //******************************************************************//
 //**** CREAR OBJETOS											****//
@@ -155,7 +157,7 @@ void CrearObjetos(HINSTANCE hInstance) {
 	Label11->Create(Frame1, "Envio", 470, 140, 37, 20, W_Align::A_DER);
 	Label12->Create(Frame1, "Recep", 470, 165, 37, 20, W_Align::A_DER);
 
-	Label18->Create(Frame1, "Logs", 10, 220, 45, 20);
+	//Label18->Create(Frame1, "Logs", 10, 220, 45, 20);
 
 	//Grupo 7
 	int Alto = Frame1->Get_Height() - 220;
@@ -174,7 +176,9 @@ void CrearObjetos(HINSTANCE hInstance) {
 	MultiLineSimu->Create(Frame1, "", X4, 210, Ancho4, Alto);
 
 	//Gupo 8
-	List->Create(Frame1, 700, 100, 60, 60);
+	GroupBox5->Create(Frame1,"Comandos" ,655, 5, 370, 195);
+	ListBoardSimu->Create(Frame1, 665, 20, 280, 85);
+	ListSimuBoard->Create(Frame1, 665, 110, 350, 85);
 
 }
 

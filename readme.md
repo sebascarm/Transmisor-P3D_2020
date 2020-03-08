@@ -1,7 +1,14 @@
-Transmisor P3D 2020 v1.1.0
+Transmisor P3D 2020 v1.2.0
 =====================
+* 08/03/2020
+    * WinApi        v2.1
+        * ListBox   v2.0 (SetFont)
+        * ListBox   v2.0 (Event ChangeCell)
+        * Objeto    v2.0 (SetFont)
+    * P3D           v2.1 (Obtener vectores)
+    * Funciones     v1.1 (Funcion RedimSTR)
 * 06/02/2020
-    * Winform   (ListBox)
+    * WinApi             (ListBox)
 * 01/02/2020
     * Transmisor    v2.0
     * P3D           v2.0

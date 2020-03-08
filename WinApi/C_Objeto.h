@@ -1,3 +1,12 @@
+//######################################################//
+// OBJETO GLOBAL v2.0									//
+//######################################################//
+// ULTIMA MODIFICACION DOCUMENTADA                      //
+// 08/03/2020                                           //
+// SetFont												//
+// Creacion                                             //
+//######################################################//
+
 #pragma once
 #include <Windows.h>
 #include <string>
@@ -43,5 +52,6 @@ public:
 	// Metodos comunes		
 	void Set_Text(string Text);
 	void Set_Pos(int x, int y, int ancho, int alto);
+	void Set_Font(string Fuente);
 };
 
