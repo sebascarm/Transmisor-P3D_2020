@@ -15,5 +15,8 @@
     <ClInclude Include="Frame.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="Eventos.h">
+      <Filter>Main</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

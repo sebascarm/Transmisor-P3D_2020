@@ -13,6 +13,8 @@ public:
 	// Metodos				
 	void	Set_Text(string Text) {C_Objeto::Set_Text(Text);}
 	void	Set_Pos(int x, int y, int ancho, int alto) { C_Objeto::Set_Pos(x, y, ancho, alto); }
+	void	Set_Enable() { C_Objeto::Set_Enable(); }
+	void	Set_Disable() { C_Objeto::Set_Disable(); }
 	// Asignar Eventos		
 	void	Assign_Event_Click(void(*Function)());
 	// Evento				

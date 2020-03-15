@@ -1,8 +1,9 @@
 //######################################################//
-// P3D V 2.1											//
+// P3D V 2.2											//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 08/03/2020                                           //
+// 15/03/2020                                           //
+// Recepcion y activacion de eventos					//
 // Obtener vectores										//
 // Creacion                                             //
 //######################################################//
@@ -49,9 +50,24 @@ public:
 	virtual bool Connect() = 0;								// return true if conect ok
 	virtual void Disconnect() = 0;
 	virtual void ScreenMessage(std::string Message) = 0;	// to send message to the P3D Screen
-	//virtual void ListBoardSimu() = 0;						// return list of elemento from board to simulator
+	// Metodos											
+	virtual void Activate_After_Overhead() = 0;
+	virtual void Activate_Fordward_Overhead() = 0;
+	virtual void Activate_Glareshield() = 0;
+	virtual void Activate_Fordward_Panel() = 0;
+	virtual void Activate_Low_Fordward_Panel() = 0;
+	virtual void Activate_Control_Stand() = 0;
+	virtual void Deactivate_After_Overhead() = 0;
+	virtual void Deactivate_Fordward_Overhead() = 0;
+	virtual void Deactivate_Glareshield() = 0;
+	virtual void Deactivate_Fordward_Panel() = 0;
+	virtual void Deactivate_Low_Fordward_Panel() = 0;
+	virtual void Deactivate_Control_Stand() = 0;
+	// return list of elemento from board to simulator	
 	virtual std::vector <EST_BOARD_SIMU> Get_Board_Simu() = 0;
 	virtual std::vector <EST_SIMU_BOARD> Get_Simu_Board() = 0;
+	virtual	void Assign_Event_Reception(void(*Function)(string Comando, string Valor)) = 0;
+
 };
 
 extern DLLIMPORT P3D* New_P3D();

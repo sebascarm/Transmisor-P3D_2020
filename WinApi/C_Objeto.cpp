@@ -153,6 +153,15 @@ void C_Objeto::Set_Pos(int x, int y, int ancho, int alto) {
 	SetWindowPos(hWnd, 0, x, y, ancho, alto, 0);
 }
 
+void C_Objeto::Set_Enable() {
+	EnableWindow(hWnd, TRUE);
+}
+void C_Objeto::Set_Disable() {
+	EnableWindow(hWnd, FALSE);
+}
+
+
+
 
 //*********************************************
 //*** FUNCION POR DEFECTO SIN DEFINIR		***

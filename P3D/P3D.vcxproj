@@ -189,6 +189,7 @@
     <ClInclude Include="P3D.h" />
     <ClInclude Include="P3D_Base.h" />
     <ClInclude Include="PMDG_NG3_SDK.h" />
+    <ClInclude Include="Recepcion_PMDG.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

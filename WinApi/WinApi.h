@@ -1,8 +1,9 @@
 //######################################################//
-// WIN API v2.1											//
+// WIN API v2.2											//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
 // 08/03/2020                                           //
+// Habilitar y deshabilitar objetos						//
 // ListBox v2.0											//
 // Creacion                                             //
 //######################################################//
@@ -56,6 +57,8 @@ public:
 	virtual int		Get_Pos_Y() = 0;
 	virtual void	Set_Text(string Text) = 0;
 	virtual void	Set_Pos(int x = -1, int y = -1, int ancho = -1, int alto = -1) = 0; //El -1 mantiene el tamaño actual
+	virtual void	Set_Enable() = 0;
+	virtual void	Set_Disable() = 0;
 	// Asignacion de eventos
 	virtual void	Assign_Event_Click(void(*Function)()) = 0;
 };
@@ -68,6 +71,8 @@ public:
 	virtual int		Get_Pos_Y() = 0;
 	virtual void	Set_Text(string Text) = 0;
 	virtual void	Set_Pos(int x = -1, int y = -1, int ancho = -1, int alto = -1) = 0;
+	virtual void	Set_Enable() = 0;
+	virtual void	Set_Disable() = 0;
 };
 // GROUPBOX			
 class Win_GroupBox {
@@ -78,6 +83,8 @@ public:
 	virtual int		Get_Pos_Y() = 0;
 	virtual void	Set_Text(string Text) = 0;
 	virtual void	Set_Pos(int x = -1, int y = -1, int ancho = -1, int alto = -1) = 0;
+	virtual void	Set_Enable() = 0;
+	virtual void	Set_Disable() = 0;
 };
 // TEXTBOX			
 class Win_TextBox {
@@ -88,6 +95,8 @@ public:
 	virtual int		Get_Pos_Y() = 0;
 	virtual void	Set_Text(string Text) = 0;
 	virtual void	Set_Pos(int x = -1, int y = -1, int ancho = -1, int alto = -1) = 0;
+	virtual void	Set_Enable() = 0;
+	virtual void	Set_Disable() = 0;
 };
 // MENU				
 class Win_Menu {
@@ -103,6 +112,8 @@ public:
 	virtual int		Get_Pos_X() = 0;
 	virtual int		Get_Pos_Y() = 0;
 	virtual void	Set_Pos(int x = -1, int y = -1, int ancho = -1, int alto = -1) = 0;
+	virtual void	Set_Enable() = 0;
+	virtual void	Set_Disable() = 0;
 	virtual void	Add_Line(string Texto) = 0;
 };
 // MESSAGE BOX		
@@ -120,6 +131,8 @@ public:
 	virtual int		Get_Row()	= 0;
 	virtual void	Set_Font(string Fuente) = 0;
 	virtual void	Set_Pos(int x = -1, int y = -1, int ancho = -1, int alto = -1) = 0;
+	virtual void	Set_Enable() = 0;
+	virtual void	Set_Disable() = 0;
 	virtual void	Add_Line(string Texto) = 0;
 	// Asignacion de evento				
 	virtual void	Assign_Event_ChangeCell(void(*Function)()) = 0;

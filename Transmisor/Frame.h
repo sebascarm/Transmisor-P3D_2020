@@ -48,19 +48,19 @@ Win_TextBox* Text_Mediador = New_TextBox();
 Win_TextBox* Text_PortMedia = New_TextBox();
 Win_Button* Boton10 = New_Button();
 //Grupo4
-Win_Button* Boton_THR = New_Button();
+Win_Button* Boton_GlareShield = New_Button();
 Win_Button* Boton_MCP = New_Button();
 Win_Button* Boton_MIP = New_Button();
 Win_Button* Boton_YOK = New_Button();
 Win_Button* Boton_FIR = New_Button();
 //Grupo5
 Win_TextBox* Text_Enviar = New_TextBox();
-Win_Button* Boton_AServidor = New_Button();
-Win_Button* Boton17 = New_Button();
-Win_Button* Boton_APlaca1 = New_Button();
-Win_Button* Boton_APlaca2 = New_Button();
-Win_Button* Boton20 = New_Button();
-Win_Button* Boton21 = New_Button();
+Win_Button* Boton_a_Sim = New_Button();
+Win_Button* Boton_de_Sim = New_Button();
+Win_Button* Boton_a_Placa1 = New_Button();
+Win_Button* Boton_a_Placa2 = New_Button();
+Win_Button* Boton_de_Placa = New_Button();
+Win_Button* Boton_a_Calib = New_Button();
 //Grupo6 (Retardos)
 Win_GroupBox* GroupBox4 = New_GroupBox();
 Win_Label* Label8 = New_Label();
@@ -130,19 +130,19 @@ void CrearObjetos(HINSTANCE hInstance) {
 	Boton_Med_Esc->Create(Frame1, "Escuch", 535, 45, 50);
 	Boton10->Create(Frame1, "Desc", 590, 45, 50);
 	//Grupo4
-	Boton_THR->Create(Frame1, "THR", 10, 105, 50);
+	Boton_GlareShield->Create(Frame1, "GlShield", 10, 105, 50);
 	Boton_MCP->Create(Frame1, "MCP", 65, 105, 50);
 	Boton_MIP->Create(Frame1, "MIP", 120, 105, 50);
 	Boton_YOK->Create(Frame1, "YOK", 175, 105, 50);
 	Boton_FIR->Create(Frame1, "FIR", 230, 105, 50);
 	//Grupo5
 	Text_Enviar->Create(Frame1, "", 10, 130, 270);
-	Boton_AServidor->Create(Frame1, "A Sim", 10, 155, 50);
-	Boton17->Create(Frame1, "De Sim", 65, 155, 50);
-	Boton_APlaca1->Create(Frame1, "A Placa1", 120, 155, 50);
-	Boton_APlaca2->Create(Frame1, "A Placa2", 175, 155, 50);
-	Boton20->Create(Frame1, "De Placa", 230, 155, 50);
-	Boton21->Create(Frame1, "A Calib", 285, 155, 50);
+	Boton_a_Sim->Create(Frame1, "A Sim", 10, 155, 50);
+	Boton_de_Sim->Create(Frame1, "De Sim", 65, 155, 50);
+	Boton_a_Placa1->Create(Frame1, "A Placa1", 120, 155, 50);
+	Boton_a_Placa2->Create(Frame1, "A Placa2", 175, 155, 50);
+	Boton_de_Placa->Create(Frame1, "De Placa", 230, 155, 50);
+	Boton_a_Calib->Create(Frame1, "A Calib", 285, 155, 50);
 	//Grupo6 (retardos)
 	GroupBox4->Create(Frame1, "Retardos", 440, 105, 210, 95);
 	Label8->Create(Frame1, "Sock", 510, 115, 40);

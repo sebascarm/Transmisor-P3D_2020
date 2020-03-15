@@ -1,8 +1,9 @@
 //######################################################//
-// OBJETO GLOBAL v2.0									//
+// OBJETO GLOBAL v2.1									//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 08/03/2020                                           //
+// 15/03/2020                                           //
+// Habilitar y deshabilitar objetos						//
 // SetFont												//
 // Creacion                                             //
 //######################################################//
@@ -53,5 +54,7 @@ public:
 	void Set_Text(string Text);
 	void Set_Pos(int x, int y, int ancho, int alto);
 	void Set_Font(string Fuente);
+	void Set_Enable();
+	void Set_Disable();
 };
 

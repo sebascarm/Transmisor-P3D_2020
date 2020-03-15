@@ -1,5 +1,12 @@
-Transmisor P3D 2020 v1.2.0
+Transmisor P3D 2020 v1.2.1
 =====================
+* 15/03/2020
+    * WinApi        v2.2 (Habiltiar y deshabilitar objetos)
+        * MultiLine v1.1 (Correccion al resize)
+        * Objeto    v2.1 (habilitar y deshabilitar objetos)
+    * Transmisor    v2.1 (Eventos separado)
+    * P3D           v2.2 (Recepcion y activacion)
+    * P3D           v2.2 (Recepcion PMDG separado)
 * 08/03/2020
     * WinApi        v2.1
         * ListBox   v2.0 (SetFont)

@@ -35,13 +35,13 @@ void C_MultiLine::Th_Add_Line() {
 			Linea_Texto = Cola_Texto.front();	//Leer cola
 			Cola_Texto.pop();					//Limpiar cola
 			// Procesar
-			Linea_Texto = Linea_Texto + "\n";
+			Linea_Texto = Linea_Texto + "\r\n";
 			// Movemos el caret al final del texto			
 			int Long_Texto = GetWindowTextLength(hWnd);
 			SendMessage(hWnd, EM_SETSEL, Long_Texto, Long_Texto);
 			//Insertamos el texto en la posicion del caret	
 			SendMessage(hWnd, EM_REPLACESEL, TRUE, reinterpret_cast<LPARAM>(Linea_Texto.c_str()));
 		}
-		Sleep(10);
+		Sleep(1);
 	}
 }

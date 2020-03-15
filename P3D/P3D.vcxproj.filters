@@ -30,5 +30,8 @@
     <ClInclude Include="PMDG_NG3_SDK.h">
       <Filter>Main\Clases</Filter>
     </ClInclude>
+    <ClInclude Include="Recepcion_PMDG.h">
+      <Filter>Main\Clases</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
