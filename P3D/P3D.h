@@ -1,8 +1,9 @@
 //######################################################//
-// P3D V 2.2											//
+// P3D V 2.3											//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 15/03/2020                                           //
+// 17/03/2020                                           //
+// Enviar datos al simulador
 // Recepcion y activacion de eventos					//
 // Obtener vectores										//
 // Creacion                                             //
@@ -50,6 +51,7 @@ public:
 	virtual bool Connect() = 0;								// return true if conect ok
 	virtual void Disconnect() = 0;
 	virtual void ScreenMessage(std::string Message) = 0;	// to send message to the P3D Screen
+	virtual void Send(string Comando, string Valor) = 0;	// Enviar datos al simu
 	// Metodos											
 	virtual void Activate_After_Overhead() = 0;
 	virtual void Activate_Fordward_Overhead() = 0;
@@ -67,6 +69,7 @@ public:
 	virtual std::vector <EST_BOARD_SIMU> Get_Board_Simu() = 0;
 	virtual std::vector <EST_SIMU_BOARD> Get_Simu_Board() = 0;
 	virtual	void Assign_Event_Reception(void(*Function)(string Comando, string Valor)) = 0;
+	virtual void Assign_Event_Send(void(*Function)(string Comando, string Definicion, string Valor)) = 0;
 
 };
 

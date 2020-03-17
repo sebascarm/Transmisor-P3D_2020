@@ -11,10 +11,17 @@ Win_Menu*	Menu1	= New_Menu();
 
 Win_MessageBox* Mensaje = New_MessageBox();
 
-Win_MultiLine* MultiLineGeneral = New_MultiLine();
-Win_MultiLine* MultiLineSerie1	= New_MultiLine();
-Win_MultiLine* MultiLineSerie2	 = New_MultiLine();
-Win_MultiLine* MultiLineSimu	= New_MultiLine();
+//Win_MultiLine* MultiLineGeneral = New_MultiLine();
+//Win_MultiLine* MultiLineSerie1	= New_MultiLine();
+//Win_MultiLine* MultiLineSerie2	 = New_MultiLine();
+//Win_MultiLine* MultiLineSimu		= New_MultiLine();
+
+Win_RichText* RichSimu		= New_RichText();
+Win_RichText* RichSerie1	= New_RichText();
+Win_RichText* RichSerie2	= New_RichText();
+Win_RichText* RichDebug		= New_RichText();
+
+
 //Gruop1
 Win_GroupBox*	GroupBox1		= New_GroupBox();
 Win_Label*		Label1			= New_Label();
@@ -170,10 +177,14 @@ void CrearObjetos(HINSTANCE hInstance) {
 	int X2 = X1 + Ancho1;
 	int X3 = X2 + Ancho2;
 	int X4 = X3 + Ancho3;
-	MultiLineGeneral->Create(Frame1, "", X1, 210, Ancho1, Alto);
-	MultiLineSerie1->Create(Frame1, "", X2, 210, Ancho2, Alto);
-	MultiLineSerie2->Create(Frame1, "", X3, 210, Ancho3, Alto);
-	MultiLineSimu->Create(Frame1, "", X4, 210, Ancho4, Alto);
+	//MultiLineGeneral->Create(Frame1, "", X1, 210, Ancho1, Alto);
+	RichSimu->Create(Frame1, "", X1, 210, Ancho1, Alto);
+	RichSerie1->Create(Frame1, "", X2, 210, Ancho2, Alto);
+	RichSerie2->Create(Frame1, "", X3, 210, Ancho3, Alto);
+	RichDebug->Create(Frame1, "", X4, 210, Ancho4, Alto);
+
+	//
+	
 
 	//Gupo 8
 	GroupBox5->Create(Frame1,"Comandos" ,655, 5, 370, 195);

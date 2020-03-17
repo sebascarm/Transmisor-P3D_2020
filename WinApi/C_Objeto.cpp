@@ -6,6 +6,7 @@
 #include "C_Menu.h"
 #include "C_MultiLine.h"
 #include "C_ListBox.h"
+#include "C_RichText.h"
 
 #include <vector>
 #include "Contenedor.h"
@@ -55,6 +56,12 @@ void C_Objeto::Contener(C_MultiLine& Objeto) {
 	ID = CONTENEDOR[Elemento].Element_ID;
 }
 void C_Objeto::Contener(C_ListBox& Objeto) {
+	Elemento = CONTENEDOR.size();
+	CONTENEDOR.resize(Elemento + 1);
+	CONTENEDOR[Elemento].New_Object(Objeto);
+	ID = CONTENEDOR[Elemento].Element_ID;
+}
+void C_Objeto::Contener(C_RichText& Objeto) {
 	Elemento = CONTENEDOR.size();
 	CONTENEDOR.resize(Elemento + 1);
 	CONTENEDOR[Elemento].New_Object(Objeto);
@@ -195,3 +202,7 @@ Win_MultiLine* New_MultiLine() {
 Win_ListBox* New_ListBox() {
 	return new C_ListBox();
 }
+Win_RichText* New_RichText() {
+	return new C_RichText();
+}
+

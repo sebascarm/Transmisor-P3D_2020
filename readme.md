@@ -1,5 +1,10 @@
-Transmisor P3D 2020 v1.2.1
+Transmisor P3D 2020 v1.2.2
 =====================
+* 17/03/2020
+    * Transmisor    v2.2 (Usando RichText)
+    * P3D           v2.3 (Enviar datos al sim)
+    * Funciones     v1.2 (String a Double)
+    * WinApi        v2.3 (RichText)
 * 15/03/2020
     * WinApi        v2.2 (Habiltiar y deshabilitar objetos)
         * MultiLine v1.1 (Correccion al resize)

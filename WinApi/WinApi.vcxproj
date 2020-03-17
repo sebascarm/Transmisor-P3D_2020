@@ -183,6 +183,7 @@
     <ClCompile Include="C_MessageBox.cpp" />
     <ClCompile Include="C_MultiLine.cpp" />
     <ClCompile Include="C_Objeto.cpp" />
+    <ClCompile Include="C_RichText.cpp" />
     <ClCompile Include="C_TextBox.cpp" />
     <ClCompile Include="C_WinApi.cpp" />
     <ClCompile Include="dllMain.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="C_MessageBox.h" />
     <ClInclude Include="C_MultiLine.h" />
     <ClInclude Include="C_Objeto.h" />
+    <ClInclude Include="C_RichText.h" />
     <ClInclude Include="C_TextBox.h" />
     <ClInclude Include="C_WinApi.h" />
     <ClInclude Include="General.h" />

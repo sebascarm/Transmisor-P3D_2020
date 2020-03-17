@@ -35,6 +35,7 @@ protected:
 	void Contener(C_Menu& Menu, int Elementos);
 	void Contener(C_MultiLine& MultiLine);
 	void Contener(C_ListBox& ListBox);
+	void Contener(C_RichText& Objeto);
 	//lo llama el contenedor
 	void Draw();
 	// Funcion vacia para callback

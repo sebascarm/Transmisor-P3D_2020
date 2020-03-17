@@ -9,7 +9,6 @@
 //----------------------------------------------//
 //-- CONSTRUCTOR CARGA DE PARAMETROS			//
 //----------------------------------------------//
-
 P3D_Base::P3D_Base() {
 	this->Cargar();
 }
@@ -28,8 +27,10 @@ bool P3D_Base::Connect() {
 		Status = true;
 		thread th_Loop_envio([this] {Th_Loop_Envio_a_Placa(); });	// Loop de envio a placa
 		thread th_Loop([this] {Th_loop_recepcion(); });				// Escuchar del simulador
+		thread th_Loop_aSim([this] {Th_Loop_Envio_a_Sim_P3D(); });	// Recepcion para envio al simulador
 		th_Loop_envio.detach();
 		th_Loop.detach();
+		th_Loop_aSim.detach();
 		return true;
 	} else {
 		//this->Status = false;
@@ -54,19 +55,30 @@ void P3D_Base::Th_loop_recepcion() {
 void P3D_Base::Cargar() {
 	Archivo* ArchivoP3D = New_File();
 	ArchivoP3D->Load("P3D.cfg");
-	//Lectura de parametros	Envio a simulador (P3D)	
-	EST_SIMU Est_aSimu;
+	// Lectura de parametros	Envio a simulador (P3D)		
+	EST_A_SIMU_P3D Est_aSimP3D;
 	string Tipo, sID, dePlaca, aSimu;
-	bool tes = false;
+	//bool tes = false;
 	while (ArchivoP3D->Read_Line(Tipo, sID, dePlaca, aSimu, "|")) {
-		if (Tipo == "WRITE") {
-			Est_aSimu.ID = Funciones::To_Integer(sID);
-			Est_aSimu.a_Simulador = aSimu;
-			this->Map_P3D_Write[dePlaca] = Est_aSimu;
+		if (Tipo == "WRITE_P3D") {
+			Est_aSimP3D.A_ID = Funciones::To_Integer(sID);
+			Est_aSimP3D.B_aSimulador = aSimu;
+			this->Map_P3D_Write[dePlaca] = Est_aSimP3D;
 		}
 	}
+	// Lectura de parametros	Envio a simulador (PMDG)	
 	ArchivoP3D->Reset_LineParameter();
-	// Lectura de READ P3D (Envio a Placa)			
+	EST_A_SIMU_PMDG Est_aSimPMDG;
+	string Definicion, Base, Comando;
+	while (ArchivoP3D->Read_Line(Tipo, dePlaca, Definicion, Base, Comando, "|")) {
+		if (Tipo == "WRITE_PMDG") {
+			Est_aSimPMDG.A_Definicion = Definicion;
+			Est_aSimPMDG.B_Comando = Funciones::To_Integer(Base) + Funciones::To_Integer(Comando);
+			this->Map_PMDG_Write[dePlaca] = Est_aSimPMDG;
+		}
+	}
+	// Lectura de READ P3D (Envio a Placa)					
+	ArchivoP3D->Reset_LineParameter();
 	int ID = 0;
 	string Evento, TipoDato, Respuesta, Decimales;
 	DATO_COMPUESTO Param_Com;
@@ -76,28 +88,25 @@ void P3D_Base::Cargar() {
 			ID++;
 		}
 	}
-	//Cargamos el arreglo en 0 para comparar cambios 
-	Array_P3D = new double[(int)Map_P3D_Read.size()];
+	Array_P3D = new double[(int)Map_P3D_Read.size()];	//Cargamos el arreglo en 0 para comparar cambios 
 	for (int i = 0; i < Map_P3D_Read.size(); i++) {
-		Array_P3D[i] = 0;
-	}
-
-	ArchivoP3D->Reset_LineParameter();
+		Array_P3D[i] = 0;}
+	
 	// Lectura de READ PMDG (Envio a Placa)			
+	ArchivoP3D->Reset_LineParameter();
 	string deSimu, aPlaca, decimales;
 	while (ArchivoP3D->Read_Line(Tipo, deSimu, aPlaca, decimales, "|")) {
 		if (Tipo == "READ_PMDG") {
 			this->Map_PMDG_Read[deSimu] = aPlaca;
 		}
 	}
-
 	// Cargar vector								
 	Buscador_P3D_Write = Map_P3D_Write.begin();
 	while (Buscador_P3D_Write != Map_P3D_Write.end()) {
 		EST_BOARD_SIMU Bs;
-		Bs.ID = Buscador_P3D_Write->second.ID;
+		Bs.ID = Buscador_P3D_Write->second.A_ID;
 		Bs.Board = Buscador_P3D_Write->first;
-		Bs.Simu = Buscador_P3D_Write->second.a_Simulador;
+		Bs.Simu = Buscador_P3D_Write->second.B_aSimulador;
 		vBoardSimu.push_back(Bs);
 		Buscador_P3D_Write++;
 	}
@@ -132,9 +141,9 @@ void P3D_Base::Conexion_P3D() {
 	// Asociamos cada Comando al  ID (WRITE EN ARCHIVO CFG)							
 	while (Buscador_P3D_Write != Map_P3D_Write.end()) {
 		// Asociacion de Comando a ID	
-		this->hr = SimConnect_MapClientEventToSimEvent(hSimConnect, Buscador_P3D_Write->second.ID, Buscador_P3D_Write->second.a_Simulador.c_str());
+		this->hr = SimConnect_MapClientEventToSimEvent(hSimConnect, Buscador_P3D_Write->second.A_ID, Buscador_P3D_Write->second.B_aSimulador.c_str());
 		// Asociamos ID a Grupo			
-		this->hr = SimConnect_AddClientEventToNotificationGroup(hSimConnect, GROUP0, Buscador_P3D_Write->second.ID);
+		this->hr = SimConnect_AddClientEventToNotificationGroup(hSimConnect, GROUP0, Buscador_P3D_Write->second.A_ID);
 		Buscador_P3D_Write++;
 	}
 	// Asignamos prioridad del Grupo	
@@ -177,8 +186,8 @@ void P3D_Base::Disconnect() {
 		Sleep(10);
 		hr = SimConnect_Close(hSimConnect);
 	}
-	
 }
+
 // Liberar la libreria		
 P3D_Base::~P3D_Base() {
 	Disconnect();
@@ -187,12 +196,25 @@ P3D_Base::~P3D_Base() {
 //------------------------------------------------//
 //--     ESCRITURA DE DATOS EN P3D Y PMDG		  //
 //------------------------------------------------//
-void P3D_Base::Send(string Comando, unsigned int Valor) {
-	// Comando es valor proveniente de la placa
-	//Solo un proceso a la vez puede encolar datos
-	//Bloqueo.lock();
-	
-	//Funciones::Divide_Data(Data, Parametro, Valor, "=");
+void P3D_Base::Send(string Comando, string Valor) {
+	// Buscamos el comandp en P3D primero	
+	Buscador_P3D_Write = Map_P3D_Write.find(Comando);
+	if (Buscador_P3D_Write != Map_P3D_Write.end()) {
+		// Encontrado		
+		Co_Valor_aSim_P3D.push(Funciones::To_Double(Valor));
+		Co_Comando_aSim_P3D.push(Buscador_P3D_Write->second.A_ID);
+		Co_Definicion_aSim_P3D.push(Buscador_P3D_Write->second.B_aSimulador);
+	}
+	// Buscamos el comando en PMDG			
+	else {
+		Buscador_PMDG_Write = Map_PMDG_Write.find(Comando);
+		if (Buscador_PMDG_Write != Map_PMDG_Write.end()) {
+			// Encontrado	
+		}
+		else {
+			// No se Econtro
+		}
+	}
 	
 	//Buscamos el Evento y Obtenemos el ID
 	Buscador_P3D_Write = Map_P3D_Write.find(Comando);
@@ -209,7 +231,7 @@ std::vector <EST_BOARD_SIMU> P3D_Base::Get_Board_Simu() {
 	return vBoardSimu;
 }
 //------------------------------------------------//
-//--     OBTENER LISTADO DE SIMULADOR BOAR		  //
+//--     OBTENER LISTADO DE SIMULADOR BOARD		  //
 //------------------------------------------------//
 std::vector <EST_SIMU_BOARD> P3D_Base::Get_Simu_Board() {
 	return vSimuBoard;
@@ -258,25 +280,11 @@ void P3D_Base::Recep_Dinamica(SIMCONNECT_RECV* pData, DWORD cbData) {
 	}                            
 }
 
-
-//----------------------------------------------//
-//-- EXPORT										//
-//----------------------------------------------//
-
-P3D* New_P3D() {
-	return new P3D_Base();
-}
-
 //------------------------------------------------//
 //--     PROCESAR RECEPCION DE P3D (SIM)		  //
 //------------------------------------------------//
 void P3D_Base::Recepcion_P3D(double* DATA) {
 	for (int i = 0; i < Map_P3D_Read.size(); i++) {
-		//cout << DATA[i] << " " << Map_P3D_Read.at(i).A_Evento << " " << Map_P3D_Read.at(i).B_TipoDato <<  endl;
-		//OutputDebugString(to_string(DATA[i]).c_str());
-		//OutputDebugString(" ");
-		//OutputDebugString(Map_P3D_Read.at(i).A_Evento.c_str());
-		//OutputDebugString("\n");
 		Controlar_P3D(DATA[i], Array_P3D[i], Map_P3D_Read.at(i).A_Evento.c_str());
 	}
 }
@@ -284,7 +292,6 @@ void P3D_Base::Recepcion_P3D(double* DATA) {
 //------------------------------------------------//
 //--     ETAPA DE CONTROL SEGUN TIPO DE DATO	  //
 //------------------------------------------------//
-
 void P3D_Base::Controlar(bool& DatoSimu, bool& DatoLocal, const char* Comando) {
 	if (DatoSimu != DatoLocal) {
 		DatoLocal = DatoSimu;
@@ -351,12 +358,18 @@ void P3D_Base::Controlar_P3D(double& DatoSimu, double& DatoLocal, const char* Co
 	}
 }
 
-
 //*********************************************
-//*** ASIGNACION DE EVENTO					***
+//*** ASIGNACION DE EVENTO (SIM A PLACA)	***
 //*********************************************
 void P3D_Base::Assign_Event_Reception(void(*Function)(string Comando, string Valor)) {
 	Function_Reception = Function;
+}
+
+//*********************************************
+//*** ASIGNACION DE EVENTO (PLACA A SIM)	***
+//*********************************************
+void P3D_Base::Assign_Event_Send(void(*Function)(string Comando, string Definicion, string Valor)) {
+	Function_Send = Function;
 }
 
 //*********************************************
@@ -387,6 +400,37 @@ void P3D_Base::Th_Loop_Envio_a_Placa() {
 			//Limpiamos cola
 			Co_Comando.pop();
 			Co_Valor.pop();
+		}
+		Sleep(1);
+	}
+}
+
+//*********************************************
+//*** TH LOOP DE ENVIO A SIM P3D			***
+//*********************************************
+void P3D_Base::Th_Loop_Envio_a_Sim_P3D() {
+	int		Comando;
+	string	Definicion;
+	double	Valor;
+	while (Status) {
+		if (!Co_Comando_aSim_P3D.empty()) {
+			Comando		= Co_Comando_aSim_P3D.front();
+			Definicion	= Co_Definicion_aSim_P3D.front();
+			Valor		= Co_Valor_aSim_P3D.front();
+			// Enviamos				
+			SimConnect_TransmitClientEvent(
+				this->hSimConnect, 
+				0, 
+				Comando, 
+				Valor,
+				SIMCONNECT_GROUP_PRIORITY_HIGHEST, 
+				SIMCONNECT_EVENT_FLAG_GROUPID_IS_PRIORITY
+			);
+			// Envio a Funcion Send	
+			Function_Send(to_string(Comando), Definicion, to_string(Valor));
+			//Limpiamos cola		
+			Co_Comando_aSim_P3D.pop();
+			Co_Valor_aSim_P3D.pop();
 		}
 		Sleep(1);
 	}
@@ -432,7 +476,6 @@ void P3D_Base::Deactivate_Control_Stand() {
 	CONTROL_STAND = false;
 }
 
-
 //*********************************************
 //*** Funcion vacia de EVENTO				***
 //*********************************************
@@ -440,5 +483,22 @@ void P3D_Base::Function_Empty(string Comando, string Valor) {
 	OutputDebugString(Comando.c_str());
 	OutputDebugString(" ");
 	OutputDebugString(Valor.c_str());
-	OutputDebugString("\n");
+	OutputDebugString("\r\n");
+}
+void P3D_Base::Function_Empty(string Comando, string Definicion, string Valor) {
+	OutputDebugString(Comando.c_str());
+	OutputDebugString(" ");
+	OutputDebugString(Definicion.c_str());
+	OutputDebugString(" ");
+	OutputDebugString(Valor.c_str());
+	OutputDebugString("\r\n");
+}
+
+
+//----------------------------------------------//
+//-- EXPORT										//
+//----------------------------------------------//
+
+P3D* New_P3D() {
+	return new P3D_Base();
 }

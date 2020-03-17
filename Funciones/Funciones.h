@@ -1,8 +1,9 @@
 //######################################################//
-// FUNCIONES V 1.1							            //
+// FUNCIONES V 1.2							            //
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 08/03/2020                                           //
+// 15/03/2020                                           //
+// Funcion de Texto a Double							//
 // Funcin RedimSTR                                      //
 // Creacion                                             //
 //######################################################//
@@ -38,10 +39,12 @@ namespace Funciones {
 	DLLIMPORT wstring String_to_WS(const std::string& str);
 	//Devuelve true si es un numero
 	DLLIMPORT bool Is_Number(std::string& Texto);
-	//Convierte un std::string en Integer
+	// Conversion de datos					
+	//Convierte un std::string en Integer	
 	DLLIMPORT int To_Integer(std::string& Texto);
 	DLLIMPORT unsigned int To_UInteger(std::string& Texto);
-	//Redondear a x decimales
+	DLLIMPORT double To_Double(std::string& Texto);
+	//Redondear a x decimales				
 	DLLIMPORT double Redondear(double Numero, int Decimales);
 	DLLIMPORT std::string a_String_red(double Numero, int Decimales);
 	//Para eventos sin accion test alguna (Solo Log en cout)
@@ -59,9 +62,9 @@ namespace Funciones {
 	DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string Divisor);
 	DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string& Text4, std::string Divisor);
 	DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string& Text4, std::string& Text5, std::string Divisor);
-	//Mapeo de valores
+	//Mapeo de valores	
 	DLLIMPORT int Mapeo(int Value, int Min1, int Max1, int Min2, int Max2);
-	//Logs y debug
+	//Logs y debug		
 	DLLIMPORT void Log(std::string Datos, std::string Datos2 = "", std::string Datos3 = "", std::string Datos4 = "", std::string Datos5 = "");
 	DLLIMPORT void Logl(std::string Datos, std::string Datos2 = "", std::string Datos3 = "", std::string Datos4 = "", std::string Datos5 = "");
 	DLLIMPORT void Debug(std::string Datos, std::string Datos2 = "", std::string Datos3 = "", std::string Datos4 = "", std::string Datos5 = "");

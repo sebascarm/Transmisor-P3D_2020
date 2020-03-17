@@ -1,11 +1,13 @@
 #pragma once
 
+//class P3D;
+
 
 extern P3D* Prep3d;
 
 void Event_Conexion_Sim() {
 	if (Prep3d->Connect()) {
-		MultiLineGeneral->Add_Line("Conexion establecida");
+		RichSimu->TextLine("Conexion establecida");
 		// Habilitar botones
 		// Deshabilitar elementos
 		Boton_GlareShield->Set_Enable();
@@ -21,14 +23,14 @@ void Event_Conexion_Sim() {
 		Boton_a_Calib->Set_Enable();
 	}
 	else {
-		MultiLineGeneral->Add_Line("Conexion no establecida");
+		RichSimu->TextLine("Conexion no establecida");
 		
 	}
 }
 
 void Event_Desconexion_Sim() {
 	Prep3d->Disconnect();
-	MultiLineGeneral->Add_Line("Conexion cerrada");
+	RichSimu->TextLine("Conexion cerrada");
 	// Deshabilitar elementos
 	Boton_GlareShield->Set_Disable();
 	Boton_MCP->Set_Disable();
@@ -55,18 +57,30 @@ void Event_Resize() {
 	int X2 = X1 + Ancho1;
 	int X3 = X2 + Ancho2;
 	int X4 = X3 + Ancho3;
-	MultiLineGeneral->Set_Pos(X1, 210, Ancho1, Alto);
-	MultiLineSerie1->Set_Pos(X2, 210, Ancho2, Alto);
-	MultiLineSerie2->Set_Pos(X3, 210, Ancho3, Alto);
-	MultiLineSimu->Set_Pos(X4, 210, Ancho4, Alto);
+	RichSimu->Set_Pos(X1, 210, Ancho1, Alto);
+	RichSerie1->Set_Pos(X2, 210, Ancho2, Alto);
+	RichSerie2->Set_Pos(X3, 210, Ancho3, Alto);
+	RichDebug->Set_Pos(X4, 210, Ancho4, Alto);
 }
 
 void Event_Recep_P3D(string Comando, string Valor) {
-	MultiLineSimu->Add_Line(Comando + "=" + Valor);
+	//MultiLineSimu->Add_Line(Comando + "=" + Valor);
+	RichSimu->ColorTextEnd("<- " + Comando + "=" + Valor, RGB(0, 0, 150));
+}
+void Event_Send_P3D(string Comando, string Definicion, string Valor) {
+	RichSimu->ColorTextEnd("-> " + Definicion + "(" + Comando + ") = " + Valor, RGB(0, 150, 0));
 }
 
 void Event_Activar_GlShield() {
 	Prep3d->Activate_Glareshield();
+}
+
+void Test() {
+	string Comando, Valor;
+	Comando = "THR_SENG1";
+	Valor = "200";
+	RichSimu->ColorTextEnd("-> " + Comando + " = " + Valor, RGB(0, 150, 150));
+	Prep3d->Send("THR_SENG1", "200");
 }
 
 //******************************************************************//
@@ -80,6 +94,12 @@ void  Eventos() {
 	Boton_GlareShield->Assign_Event_Click(Event_Activar_GlShield);
 
 	Prep3d->Assign_Event_Reception(Event_Recep_P3D);
+	Prep3d->Assign_Event_Send(Event_Send_P3D);
+	//Prep3d.aas
+
+	// Test
+	Boton_a_Sim->Assign_Event_Click(Test);
+
 }
 
 
@@ -121,5 +141,10 @@ void Configurar_objetos() {
 	Boton_a_Placa2->Set_Disable();
 	Boton_de_Placa->Set_Disable();
 	Boton_a_Calib->Set_Disable();
-	
+
+	//Test
+	//RichGeneral->ColorText("hola", RGB(250, 0, 0));
+	//RichGeneral->ColorText("como", RGB(0, 250, 0));
+	//RichGeneral->ColorTextEnd("Estas", RGB(0, 0, 250));
+	//RichGeneral->ColorText("NUEVO?", RGB(250, 0, 0));
 }

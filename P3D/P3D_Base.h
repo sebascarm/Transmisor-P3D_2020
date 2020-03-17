@@ -20,10 +20,16 @@ struct DATO_COMPUESTO {
 	string D_Decimales;
 };
 
-struct EST_SIMU {
-	int		ID;
-	string  a_Simulador;
+struct EST_A_SIMU_P3D {
+	int		A_ID;
+	string  B_aSimulador;
 };
+
+struct EST_A_SIMU_PMDG {
+	string A_Definicion;
+	unsigned int B_Comando;
+};
+
 
 //struct EST_BOARD_SIMU {
 //	int ID;
@@ -49,11 +55,16 @@ protected:
 	// PMDG
 	map<string, string>::iterator Buscador_PMDG_Read;		// desde Sim
 	map<string, string> Map_PMDG_Read;						// desde Sim
+	// P3D	
+	//Mapeo (de placa - id, a Simu)										
+	map<string, EST_A_SIMU_P3D>::iterator Buscador_P3D_Write;		// hacia Sim
+	map<string, EST_A_SIMU_P3D> Map_P3D_Write;					// hacia Sim
+	// PMDG	
+	//Mapeo (de placa - Definicion, Comando)							
+	map<string, EST_A_SIMU_PMDG>::iterator Buscador_PMDG_Write;		// hacia Sim
+	map<string, EST_A_SIMU_PMDG> Map_PMDG_Write;			// hacia Sim
 
-	//Mapeo de elementos para P3D (de placa, id , a Simu)								
-	map<string, EST_SIMU>::iterator Buscador_P3D_Write;		// hacia Sim
-	map<string, EST_SIMU> Map_P3D_Write;					// hacia Sim
-	
+
 	//Posiblemente dejar en desuso la estructura Est_P3D
 	//double* Array_P3D = NULL;	//Array dinamico(determinar su uso)	
 	std::vector <EST_BOARD_SIMU> vBoardSimu;
@@ -88,19 +99,27 @@ protected:
 	// Coontr
 	void Th_loop_recepcion();
 	void Th_Loop_Envio_a_Placa();
+	void Th_Loop_Envio_a_Sim_P3D();
 	// Valores a enviar a placa
 	queue<string> Co_Comando;
 	queue<string> Co_Valor;
+	// Valores para envio al simu P3D
+	queue<int>		Co_Comando_aSim_P3D;
+	queue<string>	Co_Definicion_aSim_P3D;
+	queue<double>	Co_Valor_aSim_P3D;
+
 	// Evento
 	static void Function_Empty(string Comando, string Valor);
-	void (*Function_Reception)(string Comando, string Valor) = Function_Empty; // A un puntero de funcion solo se puede asignar una funcion estatica
-	
+	static void Function_Empty(string Comando, string Definicion, string Valor);
+	void (*Function_Reception)(string Comando, string Valor) = Function_Empty;						// A un puntero de funcion solo se puede asignar una funcion estatica
+	void (*Function_Send)(string Comando, string Definicion, string Valor) = Function_Empty;		// A un puntero de funcion solo se puede asignar una funcion estatica
+
 public:
 	P3D_Base();					// Constructor
 	~P3D_Base();				// Destructor
 	bool Connect();				// return true if conect ok		
 	void Disconnect();			// Disconect
-	void Send(string, unsigned int);			// Enviar datos al simu
+	void Send(string Comando, string Valor);	// Enviar datos al simu
 	void ScreenMessage(std::string Message);	// to send message to the P3D Screen
 	std::vector <EST_BOARD_SIMU> Get_Board_Simu();
 	std::vector <EST_SIMU_BOARD> Get_Simu_Board();
@@ -118,8 +137,11 @@ public:
 	void Deactivate_Low_Fordward_Panel();
 	void Deactivate_Control_Stand();
 	// Asignar Eventos		
-	void	Assign_Event_Reception(void(*Function)(string Comando, string Valor));
+	void Assign_Event_Reception(void(*Function)(string Comando, string Valor));
+	void Assign_Event_Send(void(*Function)(string Comando, string Definicion, string Valor));
 	// Evento				
-	void	Event_Reception(string Comando, string Valor);
+	void Event_Reception(string Comando, string Valor);
+	//void Event_Send(string Comando, string Definicion, string Valor);
+
 };
 

@@ -111,6 +111,13 @@ namespace Funciones {
 		return Resultado;
 	}
 
+	double To_Double(string& Texto) {
+		double Resultado = 0;
+		istringstream myStream(Texto);
+		myStream >> Resultado;
+		return Resultado;
+	}
+
 	void Sum_String(string& Data) {
 		unsigned __int64 PosIni, PosFin;
 		string Texto1, Texto2;

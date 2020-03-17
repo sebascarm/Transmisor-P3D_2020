@@ -52,6 +52,9 @@
     <ClCompile Include="C_ListBox.cpp">
       <Filter>Objetos</Filter>
     </ClCompile>
+    <ClCompile Include="C_RichText.cpp">
+      <Filter>Objetos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WinApi.h">
@@ -94,6 +97,9 @@
       <Filter>Objetos</Filter>
     </ClInclude>
     <ClInclude Include="C_ListBox.h">
+      <Filter>Objetos</Filter>
+    </ClInclude>
+    <ClInclude Include="C_RichText.h">
       <Filter>Objetos</Filter>
     </ClInclude>
   </ItemGroup>

@@ -137,6 +137,23 @@ public:
 	// Asignacion de evento				
 	virtual void	Assign_Event_ChangeCell(void(*Function)()) = 0;
 };
+// RICH TEXT		
+class Win_RichText {
+public:
+	virtual void Create(Win_Frame* _Frame, string Text, int x, int y, int ancho = 60, int alto = 20) = 0;
+	// Propiedades comunes	
+	virtual int	Get_Pos_X() = 0;
+	virtual int	Get_Pos_Y() = 0;
+	// Metodos comunes		
+	virtual void Set_Pos(int x, int y, int ancho, int alto) = 0;
+	virtual void Set_Enable() = 0;
+	virtual void Set_Disable() = 0;
+	// Metodos propios		
+	virtual void ChangeColor(COLORREF Color)=0;
+	virtual void TextLine(string Text)=0;
+	virtual void ColorText(string Text, COLORREF Color) = 0;
+	virtual void ColorTextEnd(string Text, COLORREF Color) = 0;
+};
 
 extern DLLIMPORT Win_Api* New_Api();
 extern DLLIMPORT Win_Frame* New_Frame();
@@ -148,3 +165,4 @@ extern DLLIMPORT Win_Menu* New_Menu();
 extern DLLIMPORT Win_MultiLine* New_MultiLine();
 extern DLLIMPORT Win_MessageBox* New_MessageBox();
 extern DLLIMPORT Win_ListBox* New_ListBox();
+extern DLLIMPORT Win_RichText* New_RichText();

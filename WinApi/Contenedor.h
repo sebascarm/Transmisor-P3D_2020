@@ -12,6 +12,7 @@ class C_TextBox;	/* Forward declaration de Child; */
 class C_Menu;		/* Forward declaration de Child; */
 class C_MultiLine;  /* Forward declaration de Child; */
 class C_ListBox;	/* Forward declaration de Child; */
+class C_RichText;	/* Forward declaration de Child; */
 
 class Contenedor {
 private:
@@ -28,6 +29,7 @@ public:
 	void New_Object(C_Menu& _Objeto);
 	void New_Object(C_MultiLine& _Objeto);
 	void New_Object(C_ListBox& _Objeto);
+	void New_Object(C_RichText& _Objeto);
 	//envios
 	void	Draw();		// Dibujo (para todos los elementos							
 	void	Show();		// Show (para frame)										
@@ -46,6 +48,6 @@ public:
 	C_Menu*			pMenu;
 	C_MultiLine*	pMultiLine;
 	C_ListBox*		pListBox;
-	
+	C_RichText*		pRichText;
 };
 

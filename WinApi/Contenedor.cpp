@@ -9,6 +9,7 @@
 #include "C_Menu.h"
 #include "C_MultiLine.h"
 #include "C_ListBox.h"
+#include "C_RichText.h"
 
 int Contenedor::Elementos = 100;
 
@@ -57,6 +58,11 @@ void Contenedor::New_Object(C_ListBox& _Objeto) {
 	Agregar();
 	pListBox = &_Objeto;
 	this->Tipo = TipoObjeto::T_LISTBOX;
+}
+void Contenedor::New_Object(C_RichText& _Objeto) {
+	Agregar();
+	pRichText = &_Objeto;
+	this->Tipo = TipoObjeto::T_RICHTEXT;
 }
 
 
@@ -118,6 +124,9 @@ void Contenedor::Draw() {
 		break;
 	case TipoObjeto::T_LISTBOX:
 		pListBox->Draw();
+		break;
+	case TipoObjeto::T_RICHTEXT:
+		pRichText->Draw();
 		break;
 	}
 }
