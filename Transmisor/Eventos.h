@@ -63,12 +63,13 @@ void Event_Resize() {
 	RichDebug->Set_Pos(X4, 210, Ancho4, Alto);
 }
 
-void Event_Recep_P3D(string Comando, string Valor) {
+void Event_Recep_P3D(string Comando, string aPlaca, string Valor) {
 	//MultiLineSimu->Add_Line(Comando + "=" + Valor);
 	RichSimu->ColorTextEnd("<- " + Comando + "=" + Valor, RGB(0, 0, 150));
+	RichSimu->ColorTextEnd("<< " + aPlaca + "=" + Valor, RGB(150, 0, 150));
 }
 void Event_Send_P3D(string Comando, string Definicion, string Valor) {
-	RichSimu->ColorTextEnd("-> " + Definicion + "(" + Comando + ") = " + Valor, RGB(0, 150, 0));
+	RichSimu->ColorTextEnd(">> " + Definicion + "(" + Comando + ") = " + Valor, RGB(0, 150, 0));
 }
 
 void Event_Activar_GlShield() {
@@ -109,8 +110,9 @@ void  Eventos() {
 
 void Configurar_objetos() {
 	// Cambiar fuentes de Listbox
-	ListBoardSimu->Set_Font("Courier new");
-	ListSimuBoard->Set_Font("Courier new");
+	ListBoardSimu->Set_Font("Consolas");
+	ListSimuBoard->Set_Font("Consolas");
+	RichSimu->Set_Font("Consolas");
 	// Cargar List Box Board Simu
 	std::vector <EST_BOARD_SIMU> vecBoarSimu;
 	vecBoarSimu = Prep3d->Get_Board_Simu();

@@ -1,10 +1,17 @@
-Transmisor P3D 2020 v1.2.2
+Transmisor P3D 2020 v1.2.3
 =====================
+* 18/03/2020
+    * WinApi        v2.4 (RichText con SetFont)
+    * P3D           v2.4 (Uso de decimales)
+    * Funciones     v1.3 (Split String en vector)
+    * Archivo       v1.1 (Lectura de linea en vector)
+
 * 17/03/2020
     * Transmisor    v2.2 (Usando RichText)
     * P3D           v2.3 (Enviar datos al sim)
     * Funciones     v1.2 (String a Double)
     * WinApi        v2.3 (RichText)
+
 * 15/03/2020
     * WinApi        v2.2 (Habiltiar y deshabilitar objetos)
         * MultiLine v1.1 (Correccion al resize)
@@ -12,6 +19,7 @@ Transmisor P3D 2020 v1.2.2
     * Transmisor    v2.1 (Eventos separado)
     * P3D           v2.2 (Recepcion y activacion)
     * P3D           v2.2 (Recepcion PMDG separado)
+
 * 08/03/2020
     * WinApi        v2.1
         * ListBox   v2.0 (SetFont)
@@ -19,8 +27,10 @@ Transmisor P3D 2020 v1.2.2
         * Objeto    v2.0 (SetFont)
     * P3D           v2.1 (Obtener vectores)
     * Funciones     v1.1 (Funcion RedimSTR)
+
 * 06/02/2020
     * WinApi             (ListBox)
+
 * 01/02/2020
     * Transmisor    v2.0
     * P3D           v2.0

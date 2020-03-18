@@ -1,8 +1,9 @@
 //######################################################//
-// FUNCIONES V 1.2							            //
+// FUNCIONES V 1.3							            //
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 15/03/2020                                           //
+// 18/03/2020                                           //
+// Funcion Split de texto en vector						//
 // Funcion de Texto a Double							//
 // Funcin RedimSTR                                      //
 // Creacion                                             //
@@ -21,8 +22,10 @@
 #define DLLIMPORT __declspec(dllimport) 
 #endif
 
-#include <string>		//Para Tipo de datos string
-#include <Windows.h>	//Tal vez para wstring
+#include <string>		// Para Tipo de datos string
+#include <vector>		// Para slit de cadenas (nuevo)
+#include <Windows.h>	// Tal vez para wstring
+
 using namespace std;	//Para string
 
 namespace Funciones {
@@ -58,10 +61,12 @@ namespace Funciones {
 	//Suma datos de cadenas (si hay numeros)
 	DLLIMPORT void Sum_String(std::string& Data);
 	//Divide datos entregando textos distintos (se omite el extern "c" para permitir sobrecarga (no se puede usar en C)
-	DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string Divisor);
-	DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string Divisor);
-	DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string& Text4, std::string Divisor);
-	DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string& Text4, std::string& Text5, std::string Divisor);
+	//DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string Divisor);
+	//DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string Divisor);
+	//DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string& Text4, std::string Divisor);
+	//DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string& Text4, std::string& Text5, std::string Divisor);
+	// Divide Cadenas y entrega Vector
+	DLLIMPORT std::vector<std::string> Split_String(const std::string& Cadena, char Divisor);
 	//Mapeo de valores	
 	DLLIMPORT int Mapeo(int Value, int Min1, int Max1, int Min2, int Max2);
 	//Logs y debug		

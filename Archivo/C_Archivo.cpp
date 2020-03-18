@@ -1,6 +1,7 @@
 #include "C_Archivo.h"
 //#include <Windows.h>	# para el debug
 //#include <iostream>  //Para cout
+#include <sstream>		//Para split string
 
 bool C_Archivo::Load(std::string File) {
 	Nombre_Archivo = File;
@@ -87,65 +88,39 @@ void C_Archivo::Save(std::string File) {
 		Funciones::Log("No se encontro el Archivo para guardar");
 	}
 }
-//------------------------------------------------//
-//--     PARA LECTURA SECUENCIAL				  //
-//------------------------------------------------//
-bool C_Archivo::Read_Line(std::string& Resul) {
-	return Read_Line_int(Resul, Resul, Resul, Resul, Resul, "", 1);
-}
-bool C_Archivo::Read_Line(std::string& Resul, std::string& Resul2, std::string Divisor) {
-	return Read_Line_int(Resul, Resul2, Resul2, Resul2, Resul2, Divisor, 2);
-}
-bool C_Archivo::Read_Line(std::string& Resul, std::string& Resul2, std::string& Resul3, std::string Divisor) {
-	return Read_Line_int(Resul, Resul2, Resul3, Resul3, Resul3, Divisor, 3);
-}
-bool C_Archivo::Read_Line(std::string& Resul, std::string& Resul2, std::string& Resul3, std::string& Resul4, std::string Divisor) {
-	return Read_Line_int(Resul, Resul2, Resul3, Resul4, Resul4, Divisor, 4);
-}
-bool C_Archivo::Read_Line(std::string& Resul, std::string& Resul2, std::string& Resul3, std::string& Resul4, std::string& Resul5, std::string Divisor) {
-	return Read_Line_int(Resul, Resul2, Resul3, Resul4, Resul5, Divisor, 5);
-}
 
-
-bool C_Archivo::Read_Line_int(std::string& Resul, std::string& Resul2, std::string& Resul3, std::string& Resul4, string& Resul5, std::string Divisor, int Elementos) {
-	//int PosIni, PosFin, Posicion, Longitud;
-	int PosFin, Longitud;
-	Resul = "";	Resul2 = ""; Resul3 = ""; Resul4 = ""; Resul5 = "";
-	std::string TextoLinea = "";
+// Lectura secuencial en vector - el ultimo vector se retorna en vacion '' para saber que es el ultimo
+bool C_Archivo::Read_LineVec(std::vector<std::string>& Vector_Resul, char Separador) {
 	bool FindeLinea = false;
+	Vector_Resul.clear();	// Vaciado del vector
+	int PosFin, Longitud;
+	std::string TextoLinea = "";
 	//Obtener la linea
 	PosFin = (int)Contenido.find("\n", PosParam);
 	if (PosFin == -1)
 		PosFin = (int)size(Contenido);	//Si no hay enter (ultima linea)
 	Longitud = PosFin - PosParam;
 	if (Longitud >= 0) {
-		TextoLinea = Contenido.substr(PosParam, Longitud);
+		TextoLinea = Contenido.substr(PosParam, Longitud); // Resultado de linea
 		PosParam = PosFin + 1;
-	}
-	else {
-		TextoLinea = "";
+	} else {
+		TextoLinea = ""; // No hay mas lienas
 		Funciones::Debug("Fin de Archivo");
 		return false;
 	}
 	//Revisamos si hay datos en el texto
 	if (Funciones::Texto_vacio(TextoLinea)) {
-		return true;	//Para forzar a leer otra linea
+		Vector_Resul.push_back("");	//Ponemos el primer vector vacio
+		return true;				//Para forzar a leer otra linea (revisar de devolver el vector vacio)
 	}
-	if (Elementos == 1) {
-		Resul = TextoLinea;
+	// Almacenamos en vector
+	std::string texto;
+	std::istringstream tokenStream(TextoLinea);
+	while (std::getline(tokenStream, texto, Separador)) {
+		Funciones::Clear_Text(texto);
+		Vector_Resul.push_back(texto);
 	}
-	else if (Elementos == 2) {
-		Funciones::Divide_Data(TextoLinea, Resul, Resul2, Divisor);
-	}
-	else if (Elementos == 3) {
-		Funciones::Divide_Data(TextoLinea, Resul, Resul2, Resul3, Divisor);
-	}
-	else if (Elementos == 4) {
-		Funciones::Divide_Data(TextoLinea, Resul, Resul2, Resul3, Resul4, Divisor);
-	}
-	else {
-		Funciones::Divide_Data(TextoLinea, Resul, Resul2, Resul3, Resul4, Resul5, Divisor);
-	}
+	Vector_Resul.push_back("");
 	return true;
 }
 

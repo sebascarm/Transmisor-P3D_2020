@@ -19,6 +19,7 @@ public:
 	int	Get_Pos_X() { return C_Objeto::Get_Pos_X(); }
 	int	Get_Pos_Y() { return C_Objeto::Get_Pos_Y(); }
 	// Metodos comunes		
+	void Set_Font(string Fuente) { C_Objeto::Set_Font(Fuente); }
 	void Set_Pos(int x, int y, int ancho, int alto) { C_Objeto::Set_Pos(x, y, ancho, alto); }
 	void Set_Enable() { C_Objeto::Set_Enable(); }
 	void Set_Disable() { C_Objeto::Set_Disable(); }

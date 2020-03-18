@@ -52,7 +52,7 @@ protected:
 	//Mapeo de elementos para P3D (ID, [Evento, TipoDato, Respuesta, Decimales])
 	map<int, DATO_COMPUESTO>::iterator Buscador_P3D_Read;	// desde Sim
 	map<int, DATO_COMPUESTO> Map_P3D_Read;					// desde Sim
-	// PMDG
+	// PMDG	(de simu - a placa, decimales) 
 	map<string, string>::iterator Buscador_PMDG_Read;		// desde Sim
 	map<string, string> Map_PMDG_Read;						// desde Sim
 	// P3D	
@@ -95,13 +95,14 @@ protected:
 	void Controlar(short& DatoSimu, short& DatoLocal, const char* Comando);
 	void Controlar(unsigned short& DatoSimu, unsigned short& DatoLocal, const char* Comando);
 	void Controlar(float& DatoSimu, float& DatoLocal, const char* Comando);
-	void Controlar_P3D(double& DatoSimu, double& DatoLocal, const char* Comando); // Lo utiliza P3D
+	void Controlar_P3D(double& DatoSimu, double& DatoLocal, int Id_Comando); // Lo utiliza P3D
 	// Coontr
 	void Th_loop_recepcion();
 	void Th_Loop_Envio_a_Placa();
 	void Th_Loop_Envio_a_Sim_P3D();
 	// Valores a enviar a placa
 	queue<string> Co_Comando;
+	queue<string> Co_aPlaca;
 	queue<string> Co_Valor;
 	// Valores para envio al simu P3D
 	queue<int>		Co_Comando_aSim_P3D;
@@ -109,9 +110,8 @@ protected:
 	queue<double>	Co_Valor_aSim_P3D;
 
 	// Evento
-	static void Function_Empty(string Comando, string Valor);
 	static void Function_Empty(string Comando, string Definicion, string Valor);
-	void (*Function_Reception)(string Comando, string Valor) = Function_Empty;						// A un puntero de funcion solo se puede asignar una funcion estatica
+	void (*Function_Reception)(string Comando, string aPlaca, string Valor) = Function_Empty;		// A un puntero de funcion solo se puede asignar una funcion estatica
 	void (*Function_Send)(string Comando, string Definicion, string Valor) = Function_Empty;		// A un puntero de funcion solo se puede asignar una funcion estatica
 
 public:
@@ -137,9 +137,10 @@ public:
 	void Deactivate_Low_Fordward_Panel();
 	void Deactivate_Control_Stand();
 	// Asignar Eventos		
-	void Assign_Event_Reception(void(*Function)(string Comando, string Valor));
+	void Assign_Event_Reception(void(*Function)(string Comando, string aPlaca, string Valor));
 	void Assign_Event_Send(void(*Function)(string Comando, string Definicion, string Valor));
 	// Evento				
+	void Event_Reception_P3D(int Id, string Valor);
 	void Event_Reception(string Comando, string Valor);
 	//void Event_Send(string Comando, string Definicion, string Valor);
 

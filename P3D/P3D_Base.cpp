@@ -57,34 +57,37 @@ void P3D_Base::Cargar() {
 	ArchivoP3D->Load("P3D.cfg");
 	// Lectura de parametros	Envio a simulador (P3D)		
 	EST_A_SIMU_P3D Est_aSimP3D;
-	string Tipo, sID, dePlaca, aSimu;
-	//bool tes = false;
-	while (ArchivoP3D->Read_Line(Tipo, sID, dePlaca, aSimu, "|")) {
-		if (Tipo == "WRITE_P3D") {
-			Est_aSimP3D.A_ID = Funciones::To_Integer(sID);
-			Est_aSimP3D.B_aSimulador = aSimu;
-			this->Map_P3D_Write[dePlaca] = Est_aSimP3D;
+	std::vector<std::string> Datos;
+	// DATOS:																		
+	// WRITE_P3D | 0 | THR_SENG1 | THROTTLE1_SET | MAPEO | 0 | 100 | 0 | 16000		
+	while (ArchivoP3D->Read_LineVec(Datos, '|')) {
+		if (Datos[0] == "WRITE_P3D") {
+			Est_aSimP3D.A_ID = Funciones::To_Integer(Datos[1]);
+			Est_aSimP3D.B_aSimulador = Datos[3];
+			this->Map_P3D_Write[Datos[2]] = Est_aSimP3D;
 		}
 	}
 	// Lectura de parametros	Envio a simulador (PMDG)	
 	ArchivoP3D->Reset_LineParameter();
 	EST_A_SIMU_PMDG Est_aSimPMDG;
-	string Definicion, Base, Comando;
-	while (ArchivoP3D->Read_Line(Tipo, dePlaca, Definicion, Base, Comando, "|")) {
-		if (Tipo == "WRITE_PMDG") {
-			Est_aSimPMDG.A_Definicion = Definicion;
-			Est_aSimPMDG.B_Comando = Funciones::To_Integer(Base) + Funciones::To_Integer(Comando);
-			this->Map_PMDG_Write[dePlaca] = Est_aSimPMDG;
+	// DATOS:																		
+	// WRITE_PMDG | MCP_COUR1 | EVT_MCP_COURSE_SELECTOR_L | 69632 | 376				
+	while (ArchivoP3D->Read_LineVec(Datos, '|')) {
+		if (Datos[0] == "WRITE_PMDG") {
+			Est_aSimPMDG.A_Definicion = Datos[2];
+			Est_aSimPMDG.B_Comando = Funciones::To_Integer(Datos[3]) + Funciones::To_Integer(Datos[4]);
+			this->Map_PMDG_Write[Datos[1]] = Est_aSimPMDG;
 		}
 	}
 	// Lectura de READ P3D (Envio a Placa)					
 	ArchivoP3D->Reset_LineParameter();
 	int ID = 0;
-	string Evento, TipoDato, Respuesta, Decimales;
 	DATO_COMPUESTO Param_Com;
-	while (ArchivoP3D->Read_Line(Tipo, Evento, TipoDato, Respuesta, Decimales, "|")) {
-		if (Tipo == "READ_P3D") {
-			this->Map_P3D_Read[ID] = { Evento, TipoDato, Respuesta, Decimales };
+	// DATOS:																		
+	// READ_P3D  | GENERAL ENG THROTTLE LEVER POSITION:1 | percent  | 2THR_SENG1 | 0
+	while (ArchivoP3D->Read_LineVec(Datos, '|')) {
+		if (Datos[0] == "READ_P3D") {
+			this->Map_P3D_Read[ID] = { Datos[1], Datos[2], Datos[3], Datos[4] };
 			ID++;
 		}
 	}
@@ -94,10 +97,11 @@ void P3D_Base::Cargar() {
 	
 	// Lectura de READ PMDG (Envio a Placa)			
 	ArchivoP3D->Reset_LineParameter();
-	string deSimu, aPlaca, decimales;
-	while (ArchivoP3D->Read_Line(Tipo, deSimu, aPlaca, decimales, "|")) {
-		if (Tipo == "READ_PMDG") {
-			this->Map_PMDG_Read[deSimu] = aPlaca;
+	// DATOS																		
+	// READ_PMDG | PED_annunParkingBrake  			| 2THR_LPKBK | 0				
+	while (ArchivoP3D->Read_LineVec(Datos, '|')) {
+		if (Datos[0] == "READ_PMDG") {
+			this->Map_PMDG_Read[Datos[1]] = Datos[2];
 		}
 	}
 	// Cargar vector								
@@ -285,7 +289,8 @@ void P3D_Base::Recep_Dinamica(SIMCONNECT_RECV* pData, DWORD cbData) {
 //------------------------------------------------//
 void P3D_Base::Recepcion_P3D(double* DATA) {
 	for (int i = 0; i < Map_P3D_Read.size(); i++) {
-		Controlar_P3D(DATA[i], Array_P3D[i], Map_P3D_Read.at(i).A_Evento.c_str());
+		//Controlar_P3D(DATA[i], Array_P3D[i], Map_P3D_Read.at(i).A_Evento.c_str(), Map_P3D_Read.at(i).C_Respuesta);
+		Controlar_P3D(DATA[i], Array_P3D[i], i);
 	}
 }
 
@@ -348,20 +353,24 @@ void P3D_Base::Controlar(float& DatoSimu, float& DatoLocal, const char* Comando)
 		Event_Reception(Comando, S_DatoSimu);
 	}
 }
-void P3D_Base::Controlar_P3D(double& DatoSimu, double& DatoLocal, const char* Comando) {
+void P3D_Base::Controlar_P3D(double& DatoSimu, double& DatoLocal, int Id_Comando) {
 	if (DatoSimu != DatoLocal) {
 		DatoLocal = DatoSimu;
 		string S_DatoSimu = to_string(DatoSimu);
+		Event_Reception_P3D(Id_Comando, S_DatoSimu);
+
+		// Controlar_P3D(DATA[i], Array_P3D[i], Map_P3D_Read.at(i).A_Evento.c_str());
 		// Encolamos directamente
-		Co_Valor.push(to_string(DatoSimu));
-		Co_Comando.push(Comando);
+		//Co_Valor.push(to_string(DatoSimu));
+		//Co_aPlaca.push(aPlaca);
+		//Co_Comando.push(Comando);
 	}
 }
 
 //*********************************************
 //*** ASIGNACION DE EVENTO (SIM A PLACA)	***
 //*********************************************
-void P3D_Base::Assign_Event_Reception(void(*Function)(string Comando, string Valor)) {
+void P3D_Base::Assign_Event_Reception(void(*Function)(string Comando, string aPlaca, string Valor)) {
 	Function_Reception = Function;
 }
 
@@ -372,33 +381,54 @@ void P3D_Base::Assign_Event_Send(void(*Function)(string Comando, string Definici
 	Function_Send = Function;
 }
 
+
 //*********************************************
 //*** EVENTO	 							***
 //*********************************************
+void P3D_Base::Event_Reception_P3D(int Id, string Valor) {
+	//Buscamos el Comando para obtener el equivalente a enviar a la placa
+	Buscador_P3D_Read = Map_P3D_Read.find(Id);
+	if (Buscador_P3D_Read != Map_P3D_Read.end()) {
+		// redondeamos			
+		if (Buscador_P3D_Read->second.D_Decimales != "") {
+			int Decimales = Funciones::To_Integer(Buscador_P3D_Read->second.D_Decimales);
+			double ValorD = Funciones::To_Double(Valor);
+			Valor = Funciones::a_String_red(ValorD, Decimales);
+		}
+		// Encontrado encolamos	
+		Co_Valor.push(Valor);
+		Co_aPlaca.push(Buscador_P3D_Read->second.C_Respuesta);
+		Co_Comando.push(Buscador_P3D_Read->second.A_Evento);
+	}
+}
+
 void P3D_Base::Event_Reception(string Comando, string Valor) {
 	//Buscamos el Comando para obtener el equivalente a enviar a la placa
 	Buscador_PMDG_Read = Map_PMDG_Read.find(Comando);
 	if (Buscador_PMDG_Read != Map_PMDG_Read.end()) {
 		// Encontrado encolamos
 		Co_Valor.push(Valor);
+		Co_aPlaca.push(Buscador_PMDG_Read->second);
 		Co_Comando.push(Comando);
 	}
 }
+
 
 //*********************************************
 //*** TH LOOP DE ENVIO A PLACA				***
 //*********************************************
 void P3D_Base::Th_Loop_Envio_a_Placa() {
-	string Comando;
-	string Valor;
+	string Comando, aPlaca, Valor;
 	while (Status) {
 		if (!Co_Comando.empty()) {
 			Comando = Co_Comando.front();
-			Valor = Co_Valor.front();
+			aPlaca  = Co_aPlaca.front();
+			Valor	= Co_Valor.front();
 			// Enviamos
-			Function_Reception(Comando, Valor);
+			Function_Reception(Comando, aPlaca, Valor);
 			//Limpiamos cola
 			Co_Comando.pop();
+			Co_aPlaca.pop();
 			Co_Valor.pop();
 		}
 		Sleep(1);
@@ -479,12 +509,6 @@ void P3D_Base::Deactivate_Control_Stand() {
 //*********************************************
 //*** Funcion vacia de EVENTO				***
 //*********************************************
-void P3D_Base::Function_Empty(string Comando, string Valor) {
-	OutputDebugString(Comando.c_str());
-	OutputDebugString(" ");
-	OutputDebugString(Valor.c_str());
-	OutputDebugString("\r\n");
-}
 void P3D_Base::Function_Empty(string Comando, string Definicion, string Valor) {
 	OutputDebugString(Comando.c_str());
 	OutputDebugString(" ");

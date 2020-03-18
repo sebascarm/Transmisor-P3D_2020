@@ -339,6 +339,22 @@ namespace Funciones {
 		}
 	}
 
+	//******************************************************
+	//**** DIVIDIR CADENA (MEJORADO)					****
+	//******************************************************
+	std::vector<std::string> Split_String(const std::string& Cadena, char Divisor) {
+		std::vector<std::string> tokens;
+		std::string token;
+		std::istringstream tokenStream(Cadena);
+		while (std::getline(tokenStream, token, Divisor)){
+			Clear_Text(token);
+			tokens.push_back(token);
+		}
+		return tokens;
+	}
+
+	
+
 	//Limpia basura (TAB)
 	void Clear_Text(string& Data) {
 		RemplazarSTR(Data, "\t", " ");

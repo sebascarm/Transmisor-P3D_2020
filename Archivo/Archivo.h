@@ -1,8 +1,9 @@
 //######################################################//
-// ARCHIVO V 1.0 (sin cambios grandes con win2019)      //
+// ARCHIVO V 1.1										//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 01/03/2020                                           //
+// 18/03/2020                                           //
+// Read_lineVec (lectura de linea en vector)			//
 // Creacion                                             //
 //######################################################//
 
@@ -20,8 +21,9 @@
 #pragma comment (lib, "Funciones.lib")
 #endif
 
-#include <string>		//Para el uso de string
-//using namespace std;	//Manejo de archivos
+#include <string>		// Para el uso de string
+#include <vector>		// Para el use de vector
+//using namespace std;	// Para std
 
 
 class Archivo {
@@ -30,13 +32,8 @@ public:
 	virtual std::string Read_Parameter(std::string Parameter) = 0;
 	virtual void Change_Parameter(std::string Parameter, std::string Value) = 0;
 	virtual void Save(std::string File) = 0;	//Incompleto // Realizar
-	
-	//Lectura secuencial de linea (Devuelve de 1 a 5 valores) - Devuelve False si no hay mas datos (fin de linea)
-	virtual bool Read_Line(std::string& Resul) = 0;
-	virtual bool Read_Line(std::string& Resul, std::string& Resul2, std::string Divisor) = 0;
-	virtual bool Read_Line(std::string& Resul,std::string& Resul2,std::string& Resul3,std::string Divisor) = 0;
-	virtual bool Read_Line(std::string& Resul,std::string& Resul2,std::string& Resul3,std::string& Resul4,std::string Divisor) = 0;
-	virtual bool Read_Line(std::string& Resul,std::string& Resul2,std::string& Resul3,std::string& Resul4,std::string& Resul5,std::string Divisor) = 0;
+	// Lectura secuencial en vector - el ultimo vector se retorna en vacion '' para saber que es el ultimo
+	virtual bool Read_LineVec(std::vector<std::string>& Vector_Resul, char Separador)=0;
 	virtual void Reset_LineParameter() = 0;
 };
 

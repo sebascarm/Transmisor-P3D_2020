@@ -1,9 +1,11 @@
 //######################################################//
-// P3D V 2.3											//
+// P3D V 2.4											//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 17/03/2020                                           //
-// Enviar datos al simulador
+// 18/03/2020                                           //
+// Uso de decimales										//
+// Mejoras de lectura de archivo y evento de recepcion	//
+// Enviar datos al simulador							//
 // Recepcion y activacion de eventos					//
 // Obtener vectores										//
 // Creacion                                             //
@@ -68,7 +70,7 @@ public:
 	// return list of elemento from board to simulator	
 	virtual std::vector <EST_BOARD_SIMU> Get_Board_Simu() = 0;
 	virtual std::vector <EST_SIMU_BOARD> Get_Simu_Board() = 0;
-	virtual	void Assign_Event_Reception(void(*Function)(string Comando, string Valor)) = 0;
+	virtual	void Assign_Event_Reception(void(*Function)(string Comando, string aPlaca, string Valor)) = 0;
 	virtual void Assign_Event_Send(void(*Function)(string Comando, string Definicion, string Valor)) = 0;
 
 };

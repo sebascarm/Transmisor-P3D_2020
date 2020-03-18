@@ -1,8 +1,9 @@
 //######################################################//
-// WIN API v2.2											//
+// WIN API v2.4											//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 08/03/2020                                           //
+// 18/03/2020                                           //
+// RichText con SetFont									//
 // Habilitar y deshabilitar objetos						//
 // ListBox v2.0											//
 // Creacion                                             //
@@ -145,6 +146,7 @@ public:
 	virtual int	Get_Pos_X() = 0;
 	virtual int	Get_Pos_Y() = 0;
 	// Metodos comunes		
+	virtual void Set_Font(string Fuente) = 0;
 	virtual void Set_Pos(int x, int y, int ancho, int alto) = 0;
 	virtual void Set_Enable() = 0;
 	virtual void Set_Disable() = 0;
