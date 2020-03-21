@@ -1,8 +1,10 @@
 //######################################################//
-// FUNCIONES V 1.3							            //
+// FUNCIONES V 1.4							            //
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 18/03/2020                                           //
+// 21/03/2020                                           //
+// Mapeo double											//
+// Correcion en borrado de comentarios					//
 // Funcion Split de texto en vector						//
 // Funcion de Texto a Double							//
 // Funcin RedimSTR                                      //
@@ -69,6 +71,7 @@ namespace Funciones {
 	DLLIMPORT std::vector<std::string> Split_String(const std::string& Cadena, char Divisor);
 	//Mapeo de valores	
 	DLLIMPORT int Mapeo(int Value, int Min1, int Max1, int Min2, int Max2);
+	DLLIMPORT double Mapeo(double Value, int Min1, int Max1, int Min2, int Max2);
 	//Logs y debug		
 	DLLIMPORT void Log(std::string Datos, std::string Datos2 = "", std::string Datos3 = "", std::string Datos4 = "", std::string Datos5 = "");
 	DLLIMPORT void Logl(std::string Datos, std::string Datos2 = "", std::string Datos3 = "", std::string Datos4 = "", std::string Datos5 = "");

@@ -1,5 +1,11 @@
 Transmisor P3D 2020 v1.2.3
 =====================
+* 21/03/2020
+    * P3D           v3.0 (Envio completo)
+    * Funciones     v1.4 (Mapeo doble y correciones)
+
+Transmisor P3D 2020 v1.2.3
+=====================
 * 18/03/2020
     * WinApi        v2.4 (RichText con SetFont)
     * P3D           v2.4 (Uso de decimales)

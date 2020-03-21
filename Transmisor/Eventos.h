@@ -49,10 +49,10 @@ void Event_Resize() {
 	//OutputDebugString("CALL FRAME RESIZE\n");
 	int Alto = Frame1->Get_Height() - 220;
 	int Ancho = Frame1->Get_Width() - 15;
-	int Ancho1 = (int)(Ancho * 4 / 12);
+	int Ancho1 = (int)(Ancho * 4.5 / 12);
 	int Ancho2 = (int)(Ancho * 2.5 / 12);
 	int Ancho3 = (int)(Ancho * 2.5 / 12);
-	int Ancho4 = (int)(Ancho * 3 / 12);
+	int Ancho4 = (int)(Ancho * 2.5 / 12);
 	int X1 = 10;
 	int X2 = X1 + Ancho1;
 	int X3 = X2 + Ancho2;
@@ -63,10 +63,10 @@ void Event_Resize() {
 	RichDebug->Set_Pos(X4, 210, Ancho4, Alto);
 }
 
-void Event_Recep_P3D(string Comando, string aPlaca, string Valor) {
+void Event_Recep_P3D(string Comando, string aPlaca, string Valor_Comando, string Valor_aPlaca) {
 	//MultiLineSimu->Add_Line(Comando + "=" + Valor);
-	RichSimu->ColorTextEnd("<- " + Comando + "=" + Valor, RGB(0, 0, 150));
-	RichSimu->ColorTextEnd("<< " + aPlaca + "=" + Valor, RGB(150, 0, 150));
+	RichSimu->ColorTextEnd("<- " + Comando + "=" + Valor_Comando, RGB(0, 0, 150));
+	RichSimu->ColorTextEnd("<< " + aPlaca + "=" + Valor_aPlaca, RGB(150, 0, 150));
 }
 void Event_Send_P3D(string Comando, string Definicion, string Valor) {
 	RichSimu->ColorTextEnd(">> " + Definicion + "(" + Comando + ") = " + Valor, RGB(0, 150, 0));
@@ -79,11 +79,24 @@ void Event_Activar_GlShield() {
 void Test() {
 	string Comando, Valor;
 	Comando = "THR_SENG1";
-	Valor = "200";
+	Valor = "50";
 	RichSimu->ColorTextEnd("-> " + Comando + " = " + Valor, RGB(0, 150, 150));
-	Prep3d->Send("THR_SENG1", "200");
+	Prep3d->Send(Comando, Valor);
 }
+void Test2() {
+	string Comando, Valor;
+	for (int i = 0; i < 50; i++) {
+		Comando = "MCP_COUR1";
+		Valor = "UP";
+		RichSimu->ColorTextEnd("-> " + Comando + " = " + Valor, RGB(0, 150, 150));
+		Prep3d->Send(Comando, Valor);
 
+		Comando = "MCP_COUR1";
+		Valor = "262144";
+		RichSimu->ColorTextEnd("-> " + Comando + " = " + Valor, RGB(0, 150, 150));
+		Prep3d->Send(Comando, Valor);
+	}
+}
 //******************************************************************//
 //**** ASIGNACION DE EVENTOS									****//
 //******************************************************************//
@@ -100,6 +113,7 @@ void  Eventos() {
 
 	// Test
 	Boton_a_Sim->Assign_Event_Click(Test);
+	Boton_de_Sim->Assign_Event_Click(Test2);
 
 }
 
@@ -114,7 +128,7 @@ void Configurar_objetos() {
 	ListSimuBoard->Set_Font("Consolas");
 	RichSimu->Set_Font("Consolas");
 	// Cargar List Box Board Simu
-	std::vector <EST_BOARD_SIMU> vecBoarSimu;
+	std::vector <ST_BOARD_SIMU> vecBoarSimu;
 	vecBoarSimu = Prep3d->Get_Board_Simu();
 	for (int i = 0; i < vecBoarSimu.size(); i++) {
 		string ID = to_string(vecBoarSimu[i].ID);
@@ -123,7 +137,7 @@ void Configurar_objetos() {
 		ListBoardSimu->Add_Line(ID + " - " + Board + " -> " + Simu);
 	}
 	// Cargar List Box Simu Board
-	std::vector <EST_SIMU_BOARD> vecSimuBoard;
+	std::vector <ST_SIMU_BOARD> vecSimuBoard;
 	vecSimuBoard = Prep3d->Get_Simu_Board();
 	for (int i = 0; i < vecSimuBoard.size(); i++) {
 		string Simu = vecSimuBoard[i].Simu;

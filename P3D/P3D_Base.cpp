@@ -27,10 +27,12 @@ bool P3D_Base::Connect() {
 		Status = true;
 		thread th_Loop_envio([this] {Th_Loop_Envio_a_Placa(); });	// Loop de envio a placa
 		thread th_Loop([this] {Th_loop_recepcion(); });				// Escuchar del simulador
-		thread th_Loop_aSim([this] {Th_Loop_Envio_a_Sim_P3D(); });	// Recepcion para envio al simulador
+		thread th_Loop_aSimP3D([this] {Th_Loop_Envio_a_Sim_P3D(); });	// Recepcion para envio al simulador
+		thread th_Loop_aSimPMDG([this] {Th_Loop_Envio_a_Sim_PMDG(); });	// Recepcion para envio al simulador
 		th_Loop_envio.detach();
 		th_Loop.detach();
-		th_Loop_aSim.detach();
+		th_Loop_aSimP3D.detach();
+		th_Loop_aSimPMDG.detach();
 		return true;
 	} else {
 		//this->Status = false;
@@ -56,20 +58,30 @@ void P3D_Base::Cargar() {
 	Archivo* ArchivoP3D = New_File();
 	ArchivoP3D->Load("P3D.cfg");
 	// Lectura de parametros	Envio a simulador (P3D)		
-	EST_A_SIMU_P3D Est_aSimP3D;
+	ST_A_SIMU_P3D St_aSimP3D;
 	std::vector<std::string> Datos;
 	// DATOS:																		
 	// WRITE_P3D | 0 | THR_SENG1 | THROTTLE1_SET | MAPEO | 0 | 100 | 0 | 16000		
 	while (ArchivoP3D->Read_LineVec(Datos, '|')) {
 		if (Datos[0] == "WRITE_P3D") {
-			Est_aSimP3D.A_ID = Funciones::To_Integer(Datos[1]);
-			Est_aSimP3D.B_aSimulador = Datos[3];
-			this->Map_P3D_Write[Datos[2]] = Est_aSimP3D;
+			St_aSimP3D.A_ID = Funciones::To_Integer(Datos[1]);
+			St_aSimP3D.B_aSimulador = Datos[3];
+			// Mapeo de ser necesario
+			if (Datos[4] == "MAPEO") {
+				St_aSimP3D.C_Mapeo = true;
+				St_aSimP3D.D_Min_In= Funciones::To_Integer(Datos[5]);
+				St_aSimP3D.E_Max_In = Funciones::To_Integer(Datos[6]);
+				St_aSimP3D.F_Min_Out = Funciones::To_Integer(Datos[7]);
+				St_aSimP3D.G_Max_Out = Funciones::To_Integer(Datos[8]);
+			} else {
+				St_aSimP3D.C_Mapeo = false;
+			}
+			this->Map_P3D_Write[Datos[2]] = St_aSimP3D;
 		}
 	}
 	// Lectura de parametros	Envio a simulador (PMDG)	
 	ArchivoP3D->Reset_LineParameter();
-	EST_A_SIMU_PMDG Est_aSimPMDG;
+	ST_A_SIMU_PMDG Est_aSimPMDG;
 	// DATOS:																		
 	// WRITE_PMDG | MCP_COUR1 | EVT_MCP_COURSE_SELECTOR_L | 69632 | 376				
 	while (ArchivoP3D->Read_LineVec(Datos, '|')) {
@@ -82,7 +94,7 @@ void P3D_Base::Cargar() {
 	// Lectura de READ P3D (Envio a Placa)					
 	ArchivoP3D->Reset_LineParameter();
 	int ID = 0;
-	DATO_COMPUESTO Param_Com;
+	ST_A_PLACA_P3D Param_Com;
 	// DATOS:																		
 	// READ_P3D  | GENERAL ENG THROTTLE LEVER POSITION:1 | percent  | 2THR_SENG1 | 0
 	while (ArchivoP3D->Read_LineVec(Datos, '|')) {
@@ -101,13 +113,13 @@ void P3D_Base::Cargar() {
 	// READ_PMDG | PED_annunParkingBrake  			| 2THR_LPKBK | 0				
 	while (ArchivoP3D->Read_LineVec(Datos, '|')) {
 		if (Datos[0] == "READ_PMDG") {
-			this->Map_PMDG_Read[Datos[1]] = Datos[2];
+			this->Map_PMDG_Read[Datos[1]] = { Datos[2], Datos[3] };
 		}
 	}
 	// Cargar vector								
 	Buscador_P3D_Write = Map_P3D_Write.begin();
 	while (Buscador_P3D_Write != Map_P3D_Write.end()) {
-		EST_BOARD_SIMU Bs;
+		ST_BOARD_SIMU Bs;
 		Bs.ID = Buscador_P3D_Write->second.A_ID;
 		Bs.Board = Buscador_P3D_Write->first;
 		Bs.Simu = Buscador_P3D_Write->second.B_aSimulador;
@@ -117,9 +129,9 @@ void P3D_Base::Cargar() {
 	// Cargar vector READ PMDG						
 	Buscador_PMDG_Read = Map_PMDG_Read.begin();
 	while (Buscador_PMDG_Read != Map_PMDG_Read.end()) {
-		EST_SIMU_BOARD Sb;
+		ST_SIMU_BOARD Sb;
 		Sb.Simu = Buscador_PMDG_Read->first;
-		Sb.Board = Buscador_PMDG_Read->second;
+		Sb.Board = Buscador_PMDG_Read->second.A_Respuesta;
 		vSimuBoard.push_back(Sb);
 		Buscador_PMDG_Read++;
 	}
@@ -197,23 +209,43 @@ P3D_Base::~P3D_Base() {
 	Disconnect();
 }
 
-//------------------------------------------------//
-//--     ESCRITURA DE DATOS EN P3D Y PMDG		  //
-//------------------------------------------------//
+//--------------------------------------------------------//
+//--     ESCRITURA DE DATOS EN P3D Y PMDG (ENVIO A SIM)	  //
+//--------------------------------------------------------//
 void P3D_Base::Send(string Comando, string Valor) {
-	// Buscamos el comandp en P3D primero	
+	// Buscamos el comando en P3D primero	
 	Buscador_P3D_Write = Map_P3D_Write.find(Comando);
 	if (Buscador_P3D_Write != Map_P3D_Write.end()) {
 		// Encontrado		
 		Co_Valor_aSim_P3D.push(Funciones::To_Double(Valor));
 		Co_Comando_aSim_P3D.push(Buscador_P3D_Write->second.A_ID);
 		Co_Definicion_aSim_P3D.push(Buscador_P3D_Write->second.B_aSimulador);
+		// Mapeo			
+		if (Buscador_P3D_Write->second.C_Mapeo) {
+			Co_Mapeo_aSim_P3D.push(true);
+			Co_Min_In_aSim_P3D.push(Buscador_P3D_Write->second.D_Min_In);
+			Co_Max_In_aSim_P3D.push(Buscador_P3D_Write->second.E_Max_In);
+			Co_Min_Out_aSim_P3D.push(Buscador_P3D_Write->second.F_Min_Out);
+			Co_Max_Out_aSim_P3D.push(Buscador_P3D_Write->second.G_Max_Out);
+		} else {
+			Co_Mapeo_aSim_P3D.push(false);
+		}
 	}
 	// Buscamos el comando en PMDG			
 	else {
 		Buscador_PMDG_Write = Map_PMDG_Write.find(Comando);
 		if (Buscador_PMDG_Write != Map_PMDG_Write.end()) {
 			// Encontrado	
+			// verificamos si el valor es up o down
+			if (Valor == "UP") {
+				Co_Valor_aSim_PMDG.push(MOUSE_FLAG_WHEEL_UP);
+			} else if (Valor == "DOWN") {
+				Co_Valor_aSim_PMDG.push(MOUSE_FLAG_WHEEL_DOWN);
+			} else {
+				Co_Valor_aSim_PMDG.push(Funciones::To_Integer(Valor));
+			}
+			Co_Definicion_aSim_PMDG.push(Buscador_PMDG_Write->second.A_Definicion);
+			Co_Comando_aSim_PMDG.push(Buscador_PMDG_Write->second.B_Comando);
 		}
 		else {
 			// No se Econtro
@@ -221,23 +253,23 @@ void P3D_Base::Send(string Comando, string Valor) {
 	}
 	
 	//Buscamos el Evento y Obtenemos el ID
-	Buscador_P3D_Write = Map_P3D_Write.find(Comando);
-	if (Buscador_P3D_Write != Map_P3D_Write.end()) {
+	//Buscador_P3D_Write = Map_P3D_Write.find(Comando);
+	//if (Buscador_P3D_Write != Map_P3D_Write.end()) {
 		//Co_Evento.push(Buscador_P3D_Write->second.ID); // Envia el ID /// continuar aca
 		//Co_Parametro.push(Valor);
-	}
+	//}
 }
 
 //------------------------------------------------//
 //--     OBTENER LISTADO DE BOARD SIMULADOR		  //
 //------------------------------------------------//
-std::vector <EST_BOARD_SIMU> P3D_Base::Get_Board_Simu() {
+std::vector <ST_BOARD_SIMU> P3D_Base::Get_Board_Simu() {
 	return vBoardSimu;
 }
 //------------------------------------------------//
 //--     OBTENER LISTADO DE SIMULADOR BOARD		  //
 //------------------------------------------------//
-std::vector <EST_SIMU_BOARD> P3D_Base::Get_Simu_Board() {
+std::vector <ST_SIMU_BOARD> P3D_Base::Get_Simu_Board() {
 	return vSimuBoard;
 }
 //------------------------------------------------//
@@ -301,56 +333,56 @@ void P3D_Base::Controlar(bool& DatoSimu, bool& DatoLocal, const char* Comando) {
 	if (DatoSimu != DatoLocal) {
 		DatoLocal = DatoSimu;
 		string S_DatoSimu = to_string(DatoSimu);
-		Event_Reception(Comando, S_DatoSimu);
+		Event_Reception_PMDG(Comando, S_DatoSimu);
 	}
 }
 void P3D_Base::Controlar(int& DatoSimu, int& DatoLocal, const char* Comando) {
 	if (DatoSimu != DatoLocal) {
 		DatoLocal = DatoSimu;
 		string S_DatoSimu = to_string(DatoSimu);
-		Event_Reception(Comando, S_DatoSimu);
+		Event_Reception_PMDG(Comando, S_DatoSimu);
 	}
 }
 void P3D_Base::Controlar(unsigned int& DatoSimu, unsigned int& DatoLocal, const char* Comando) {
 	if (DatoSimu != DatoLocal) {
 		DatoLocal = DatoSimu;
 		string S_DatoSimu = to_string(DatoSimu);
-		Event_Reception(Comando, S_DatoSimu);
+		Event_Reception_PMDG(Comando, S_DatoSimu);
 	}
 }
 void P3D_Base::Controlar(char& DatoSimu, char& DatoLocal, const char* Comando) {
 	if (DatoSimu != DatoLocal) {
 		DatoLocal = DatoSimu;
 		string S_DatoSimu = to_string(DatoSimu);
-		Event_Reception(Comando, S_DatoSimu);
+		Event_Reception_PMDG(Comando, S_DatoSimu);
 	}
 }
 void P3D_Base::Controlar(unsigned char& DatoSimu, unsigned char& DatoLocal, const char* Comando) {
 	if (DatoSimu != DatoLocal) {
 		DatoLocal = DatoSimu;
 		string S_DatoSimu = to_string(DatoSimu);
-		Event_Reception(Comando, S_DatoSimu);
+		Event_Reception_PMDG(Comando, S_DatoSimu);
 	}
 }
 void P3D_Base::Controlar(short& DatoSimu, short& DatoLocal, const char* Comando) {
 	if (DatoSimu != DatoLocal) {
 		DatoLocal = DatoSimu;
 		string S_DatoSimu = to_string(DatoSimu);
-		Event_Reception(Comando, S_DatoSimu);
+		Event_Reception_PMDG(Comando, S_DatoSimu);
 	}
 }
 void P3D_Base::Controlar(unsigned short& DatoSimu, unsigned short& DatoLocal, const char* Comando) {
 	if (DatoSimu != DatoLocal) {
 		DatoLocal = DatoSimu;
 		string S_DatoSimu = to_string(DatoSimu);
-		Event_Reception(Comando, S_DatoSimu);
+		Event_Reception_PMDG(Comando, S_DatoSimu);
 	}
 }
 void P3D_Base::Controlar(float& DatoSimu, float& DatoLocal, const char* Comando) {
 	if (DatoSimu != DatoLocal) {
 		DatoLocal = DatoSimu;
 		string S_DatoSimu = to_string(DatoSimu);
-		Event_Reception(Comando, S_DatoSimu);
+		Event_Reception_PMDG(Comando, S_DatoSimu);
 	}
 }
 void P3D_Base::Controlar_P3D(double& DatoSimu, double& DatoLocal, int Id_Comando) {
@@ -370,7 +402,7 @@ void P3D_Base::Controlar_P3D(double& DatoSimu, double& DatoLocal, int Id_Comando
 //*********************************************
 //*** ASIGNACION DE EVENTO (SIM A PLACA)	***
 //*********************************************
-void P3D_Base::Assign_Event_Reception(void(*Function)(string Comando, string aPlaca, string Valor)) {
+void P3D_Base::Assign_Event_Reception(void(*Function)(string Comando, string aPlaca, string Valor_Comando, string Valor_aPlaca)) {
 	Function_Reception = Function;
 }
 
@@ -381,55 +413,68 @@ void P3D_Base::Assign_Event_Send(void(*Function)(string Comando, string Definici
 	Function_Send = Function;
 }
 
-
 //*********************************************
-//*** EVENTO	 							***
+//*** EVENTO (ENVIO A PLACA) P3D			***
 //*********************************************
 void P3D_Base::Event_Reception_P3D(int Id, string Valor) {
 	//Buscamos el Comando para obtener el equivalente a enviar a la placa
 	Buscador_P3D_Read = Map_P3D_Read.find(Id);
 	if (Buscador_P3D_Read != Map_P3D_Read.end()) {
-		// redondeamos			
+		// Encontrado encolamos	
 		if (Buscador_P3D_Read->second.D_Decimales != "") {
+			// redondeamos		
 			int Decimales = Funciones::To_Integer(Buscador_P3D_Read->second.D_Decimales);
 			double ValorD = Funciones::To_Double(Valor);
-			Valor = Funciones::a_String_red(ValorD, Decimales);
+			Co_Valor_aPlaca.push(Funciones::a_String_red(ValorD, Decimales));
+		} else {
+			Co_Valor_aPlaca.push(Valor);
 		}
-		// Encontrado encolamos	
-		Co_Valor.push(Valor);
+		Co_Valor_Comando.push(Valor);
 		Co_aPlaca.push(Buscador_P3D_Read->second.C_Respuesta);
 		Co_Comando.push(Buscador_P3D_Read->second.A_Evento);
 	}
 }
-
-void P3D_Base::Event_Reception(string Comando, string Valor) {
+//*********************************************
+//*** EVENTO (ENVIO A PLACA) PMDG			***
+//*********************************************
+void P3D_Base::Event_Reception_PMDG(string Comando, string Valor) {
 	//Buscamos el Comando para obtener el equivalente a enviar a la placa
 	Buscador_PMDG_Read = Map_PMDG_Read.find(Comando);
 	if (Buscador_PMDG_Read != Map_PMDG_Read.end()) {
 		// Encontrado encolamos
-		Co_Valor.push(Valor);
-		Co_aPlaca.push(Buscador_PMDG_Read->second);
+		if (Buscador_PMDG_Read->second.B_Decimales != "") {
+			// redondeamos		
+			int Decimales = Funciones::To_Integer(Buscador_PMDG_Read->second.B_Decimales);
+			double ValorD = Funciones::To_Double(Valor);
+			Co_Valor_aPlaca.push(Funciones::a_String_red(ValorD, Decimales));
+		} else {
+			Co_Valor_aPlaca.push(Valor);
+		}
+		Co_Valor_Comando.push(Valor);
+		Co_aPlaca.push(Buscador_PMDG_Read->second.A_Respuesta);
 		Co_Comando.push(Comando);
 	}
 }
 
 
 //*********************************************
-//*** TH LOOP DE ENVIO A PLACA				***
+//*** TH LOOP DE ENVIO A PLACA (P3D Y PMDG)	***
 //*********************************************
 void P3D_Base::Th_Loop_Envio_a_Placa() {
-	string Comando, aPlaca, Valor;
+	string Comando, aPlaca, Valor_Comando, Valor_aPlaca;
 	while (Status) {
 		if (!Co_Comando.empty()) {
-			Comando = Co_Comando.front();
-			aPlaca  = Co_aPlaca.front();
-			Valor	= Co_Valor.front();
+			Comando		  = Co_Comando.front();
+			aPlaca		  = Co_aPlaca.front();
+			Valor_Comando = Co_Valor_Comando.front();
+			Valor_aPlaca  = Co_Valor_aPlaca.front();
 			// Enviamos
-			Function_Reception(Comando, aPlaca, Valor);
+			Function_Reception(Comando, aPlaca, Valor_Comando, Valor_aPlaca);
 			//Limpiamos cola
 			Co_Comando.pop();
 			Co_aPlaca.pop();
-			Co_Valor.pop();
+			Co_Valor_Comando.pop();
+			Co_Valor_aPlaca.pop();
 		}
 		Sleep(1);
 	}
@@ -442,11 +487,26 @@ void P3D_Base::Th_Loop_Envio_a_Sim_P3D() {
 	int		Comando;
 	string	Definicion;
 	double	Valor;
+	//int		ValorMap;
 	while (Status) {
 		if (!Co_Comando_aSim_P3D.empty()) {
 			Comando		= Co_Comando_aSim_P3D.front();
 			Definicion	= Co_Definicion_aSim_P3D.front();
 			Valor		= Co_Valor_aSim_P3D.front();
+			//Limpiamos cola		
+			Co_Comando_aSim_P3D.pop();
+			Co_Definicion_aSim_P3D.pop();
+			Co_Valor_aSim_P3D.pop();
+			// Mapeo de ser necesario
+			if (Co_Mapeo_aSim_P3D.front()) {
+				Valor = Funciones::Mapeo(Valor, Co_Min_In_aSim_P3D.front(), Co_Max_In_aSim_P3D.front(), Co_Min_Out_aSim_P3D.front(), Co_Max_Out_aSim_P3D.front());
+				// Limpiza de cola
+				Co_Mapeo_aSim_P3D.pop();
+				Co_Min_In_aSim_P3D.pop();
+				Co_Max_In_aSim_P3D.pop();
+				Co_Min_Out_aSim_P3D.pop();
+				Co_Max_Out_aSim_P3D.pop();
+			}
 			// Enviamos				
 			SimConnect_TransmitClientEvent(
 				this->hSimConnect, 
@@ -458,9 +518,45 @@ void P3D_Base::Th_Loop_Envio_a_Sim_P3D() {
 			);
 			// Envio a Funcion Send	
 			Function_Send(to_string(Comando), Definicion, to_string(Valor));
-			//Limpiamos cola		
-			Co_Comando_aSim_P3D.pop();
-			Co_Valor_aSim_P3D.pop();
+		}
+		Sleep(1);
+	}
+}
+
+//*********************************************
+//*** TH LOOP DE ENVIO A SIM PMDG			***
+//*********************************************
+void P3D_Base::Th_Loop_Envio_a_Sim_PMDG() {
+	int		Comando;
+	string	Definicion;
+	int		Valor;
+	//int		ValorMap;
+	while (Status) {
+		if (!Co_Comando_aSim_PMDG.empty()) {
+			Comando = Co_Comando_aSim_PMDG.front();
+			Definicion = Co_Definicion_aSim_PMDG.front();
+			Valor = Co_Valor_aSim_PMDG.front();
+			// Mapeo de ser necesario
+			//Revisamos que esten procesados los eventos en PMDG
+			if (Control.Event == 0) {
+				Control.Event = Comando;
+				Control.Parameter = Valor;
+				SimConnect_SetClientData(
+					this->hSimConnect,
+					PMDG_NG3_CONTROL_ID,
+					PMDG_NG3_CONTROL_DEFINITION,
+					0,
+					0,
+					sizeof(PMDG_NG3_Control),
+					&Control
+					);
+				//Limpiamos cola		
+				Co_Comando_aSim_PMDG.pop();
+				Co_Definicion_aSim_PMDG.pop();
+				Co_Valor_aSim_PMDG.pop();
+				// Envio a Funcion Send	
+				Function_Send(to_string(Comando), Definicion, to_string(Valor));
+			}
 		}
 		Sleep(1);
 	}
@@ -517,7 +613,16 @@ void P3D_Base::Function_Empty(string Comando, string Definicion, string Valor) {
 	OutputDebugString(Valor.c_str());
 	OutputDebugString("\r\n");
 }
-
+void P3D_Base::Function_Empty(string Comando, string aPlaca, string Valor_Comando, string Valor_aPlaca) {
+	OutputDebugString(Comando.c_str());
+	OutputDebugString(" ");
+	OutputDebugString(aPlaca.c_str());
+	OutputDebugString(" ");
+	OutputDebugString(Valor_Comando.c_str());
+	OutputDebugString(" ");
+	OutputDebugString(Valor_aPlaca.c_str());
+	OutputDebugString("\r\n");
+}
 
 //----------------------------------------------//
 //-- EXPORT										//

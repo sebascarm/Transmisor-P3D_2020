@@ -172,6 +172,9 @@ namespace Funciones {
 			else { return false; }
 		}
 	}
+	//******************************************************
+	//**** DELETE COMENT (V1.1 - Correccion)			****
+	//******************************************************
 	string Delete_Comment(string Data) {
 		int PosIni, PosFin;
 		string Texto1, Texto2;
@@ -180,7 +183,8 @@ namespace Funciones {
 			PosFin = Data.find("\n", PosIni);
 			if (PosFin == -1) { PosFin = Data.size() - 1; }  // No hay enter, ultima linea
 			Texto1 = Data.substr(0, PosIni);
-			Texto2 = Data.substr(PosFin + 1);
+			//Texto2 = Data.substr(PosFin + 1);
+			Texto2 = Data.substr(PosFin);					// No borro el enter v1.1
 			Data = Texto1 + Texto2;
 			//Buscamos una nueva ocurrencia
 			PosIni = Data.find("//");
@@ -191,152 +195,13 @@ namespace Funciones {
 			PosFin = Data.find("}", PosIni);
 			if (PosFin == -1) { PosFin = Data.size(); }  // No hay enter, ultima linea
 			Texto1 = Data.substr(0, PosIni);
-			Texto2 = Data.substr(PosFin + 1);
+			//Texto2 = Data.substr(PosFin + 1);
+			Texto2 = Data.substr(PosFin);					// No borro el enter v1.1
 			Data = Texto1 + Texto2;
 			//Buscamos una nueva ocurrencia
 			PosIni = Data.find("{");
 		}
 		return Data;
-	}
-
-	//Divide datos entregando textos distintos (2 datos)
-	void Divide_Data(string Data, string& Text1, string& Text2, string Divisor) {
-		unsigned __int64 PosIni;
-		Text1 = ""; Text2 = "";
-		if (Divisor != "") {
-			PosIni = Data.find(Divisor);
-			if (PosIni >= 0) {
-				Text1 = Data.substr(0, PosIni);
-				Text2 = Data.substr(PosIni + 1);
-				//limpieza
-				Clear_Text(Text1);
-				Clear_Text(Text2);
-			}
-			else {
-				Text1 = Data;	//No hay texto2
-				Clear_Text(Text1);
-			}
-		}
-	}
-	//Divide datos entregando textos distintos (3 datos)
-	void Divide_Data(string Data, string& Text1, string& Text2, string& Text3, string Divisor) {
-		unsigned __int64 PosIni, Pos2, Largo;
-		Text1 = ""; Text2 = ""; Text3 = "";
-		if (Divisor != "") {
-			PosIni = Data.find(Divisor);
-			if (PosIni >= 0) {
-				Text1 = Data.substr(0, PosIni);
-				Clear_Text(Text1);
-				PosIni++;
-				Pos2 = Data.find(Divisor, PosIni);
-				if (Pos2 >= 0) {
-					Largo = Pos2 - PosIni;
-					Text2 = Data.substr(PosIni, Largo);
-					Text3 = Data.substr(Pos2 + 1);
-					Clear_Text(Text2);
-					Clear_Text(Text3);
-				}
-				else {
-					Text2 = Data.substr(PosIni + 1);	//no hay texto3
-					Clear_Text(Text2);
-				}
-			}
-			else {
-				Text1 = Data;	//No hay texto2
-				Clear_Text(Text1);
-			}
-		}
-	}
-	//Divide datos entregando textos distintos (4 datos)
-	void Divide_Data(string Data, string& Text1, string& Text2, string& Text3, string& Text4, string Divisor) {
-		unsigned __int64 Pos1, Pos2, Pos3, Largo;
-		Text1 = ""; Text2 = ""; Text3 = "", Text4 = "";
-		if (Divisor != "") {
-			Pos1 = Data.find(Divisor);
-			if (Pos1 >= 0) {
-				Text1 = Data.substr(0, Pos1);
-				Clear_Text(Text1);
-				Pos1++;
-				Pos2 = Data.find(Divisor, Pos1);
-				if (Pos2 >= 0) {
-					Largo = Pos2 - Pos1;
-					Text2 = Data.substr(Pos1, Largo);
-					Clear_Text(Text2);
-					Pos2++;
-					Pos3 = Data.find(Divisor, Pos2);
-					if (Pos3 >= 0) {
-						Largo = Pos3 - Pos2;
-						Text3 = Data.substr(Pos2, Largo);
-						Text4 = Data.substr(Pos3 + 1);
-						Clear_Text(Text3);
-						Clear_Text(Text4);
-					}
-					else {
-						Text3 = Data.substr(Pos2 + 1);	//no hay texto4
-						Clear_Text(Text3);
-					}
-				}
-				else {
-					Text2 = Data.substr(Pos1 + 1);	//no hay texto3
-					Clear_Text(Text2);
-				}
-			}
-			else {
-				Text1 = Data;	//No hay texto2
-				Clear_Text(Text1);
-			}
-		}
-	}
-	//Divide datos entregando textos distintos (5 datos)
-	void Divide_Data(string Data, string& Text1, string& Text2, string& Text3, string& Text4, string& Text5, string Divisor) {
-		unsigned __int64 Pos1, Pos2, Pos3, Pos4, Largo;
-		Text1 = ""; Text2 = ""; Text3 = "", Text4 = "", Text5 = "";
-		if (Divisor != "") {
-			Pos1 = Data.find(Divisor);
-			if (Pos1 >= 0) {
-				Text1 = Data.substr(0, Pos1);
-				Clear_Text(Text1);
-				Pos1++;
-				Pos2 = Data.find(Divisor, Pos1);
-				if (Pos2 >= 0) {
-					Largo = Pos2 - Pos1;
-					Text2 = Data.substr(Pos1, Largo);
-					Clear_Text(Text2);
-					Pos2++;
-					Pos3 = Data.find(Divisor, Pos2);
-					if (Pos3 >= 0) {
-						Largo = Pos3 - Pos2;
-						Text3 = Data.substr(Pos2, Largo);
-						Clear_Text(Text3);
-						Pos3++;
-						Pos4 = Data.find(Divisor, Pos3);
-						if (Pos4 >= 0) {
-							Largo = Pos4 - Pos3;
-							Text4 = Data.substr(Pos3, Largo);
-							Text5 = Data.substr(Pos4 + 1);
-							Clear_Text(Text4);
-							Clear_Text(Text5);
-						}
-						else {
-							Text4 = Data.substr(Pos3 + 1);	//no hay texto5
-							Clear_Text(Text3);
-						}
-					}
-					else {
-						Text3 = Data.substr(Pos2 + 1);	//no hay texto4
-						Clear_Text(Text3);
-					}
-				}
-				else {
-					Text2 = Data.substr(Pos1 + 1);	//no hay texto3
-					Clear_Text(Text2);
-				}
-			}
-			else {
-				Text1 = Data;	//No hay texto2
-				Clear_Text(Text1);
-			}
-		}
 	}
 
 	//******************************************************
@@ -355,15 +220,21 @@ namespace Funciones {
 
 	
 
-	//Limpia basura (TAB)
+	//Limpia basura (TAB) y espacios
 	void Clear_Text(string& Data) {
 		RemplazarSTR(Data, "\t", " ");
 		Trim(Data);
 	}
 
-	//Mapeo de valores
+	//******************************************************
+	//**** MAPEO DE VALORES								****
+	//******************************************************
 	int Mapeo(int Value, int Min1, int Max1, int Min2, int Max2) {
 		int Resul = ((Value - Min1) * (Max2 - Min2) / (Max1 - Min1)) + Min2;
+		return Resul;
+	}
+	double Mapeo(double Value, int Min1, int Max1, int Min2, int Max2) {
+		double Resul = ((Value - Min1) * (Max2 - Min2) / (Max1 - Min1)) + Min2;
 		return Resul;
 	}
 

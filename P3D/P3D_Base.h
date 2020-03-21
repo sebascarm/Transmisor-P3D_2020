@@ -13,23 +13,35 @@
 #include <string>				// string	
 using namespace std;			// string	
 
-struct DATO_COMPUESTO {
+struct ST_A_PLACA_P3D {
 	string A_Evento;
 	string B_TipoDato;
 	string C_Respuesta;
 	string D_Decimales;
 };
 
-struct EST_A_SIMU_P3D {
-	int		A_ID;
-	string  B_aSimulador;
+struct ST_A_PLACA_PMDG {
+	string A_Respuesta;
+	string B_Decimales;
 };
 
-struct EST_A_SIMU_PMDG {
+struct ST_A_SIMU_P3D {
+	int		A_ID;
+	string  B_aSimulador;
+	bool	C_Mapeo;
+	int		D_Min_In;
+	int		E_Max_In;
+	int		F_Min_Out;
+	int		G_Max_Out;
+};
+
+struct ST_A_SIMU_PMDG {
 	string A_Definicion;
 	unsigned int B_Comando;
 };
 
+#define _UP      0x00004000
+#define _DOWN    0x00002000
 
 //struct EST_BOARD_SIMU {
 //	int ID;
@@ -50,25 +62,25 @@ protected:
 	void Conexion_P3D();
 	void Conexion_PMDG();
 	//Mapeo de elementos para P3D (ID, [Evento, TipoDato, Respuesta, Decimales])
-	map<int, DATO_COMPUESTO>::iterator Buscador_P3D_Read;	// desde Sim
-	map<int, DATO_COMPUESTO> Map_P3D_Read;					// desde Sim
+	map<int, ST_A_PLACA_P3D>::iterator Buscador_P3D_Read;	// desde Sim
+	map<int, ST_A_PLACA_P3D> Map_P3D_Read;					// desde Sim
 	// PMDG	(de simu - a placa, decimales) 
-	map<string, string>::iterator Buscador_PMDG_Read;		// desde Sim
-	map<string, string> Map_PMDG_Read;						// desde Sim
+	map<string, ST_A_PLACA_PMDG>::iterator Buscador_PMDG_Read;	// desde Sim
+	map<string, ST_A_PLACA_PMDG> Map_PMDG_Read;					// desde Sim
 	// P3D	
 	//Mapeo (de placa - id, a Simu)										
-	map<string, EST_A_SIMU_P3D>::iterator Buscador_P3D_Write;		// hacia Sim
-	map<string, EST_A_SIMU_P3D> Map_P3D_Write;					// hacia Sim
+	map<string, ST_A_SIMU_P3D>::iterator Buscador_P3D_Write;		// hacia Sim
+	map<string, ST_A_SIMU_P3D> Map_P3D_Write;					// hacia Sim
 	// PMDG	
 	//Mapeo (de placa - Definicion, Comando)							
-	map<string, EST_A_SIMU_PMDG>::iterator Buscador_PMDG_Write;		// hacia Sim
-	map<string, EST_A_SIMU_PMDG> Map_PMDG_Write;			// hacia Sim
+	map<string, ST_A_SIMU_PMDG>::iterator Buscador_PMDG_Write;		// hacia Sim
+	map<string, ST_A_SIMU_PMDG> Map_PMDG_Write;			// hacia Sim
 
 
 	//Posiblemente dejar en desuso la estructura Est_P3D
 	//double* Array_P3D = NULL;	//Array dinamico(determinar su uso)	
-	std::vector <EST_BOARD_SIMU> vBoardSimu;
-	std::vector <EST_SIMU_BOARD> vSimuBoard;
+	std::vector <ST_BOARD_SIMU> vBoardSimu;
+	std::vector <ST_SIMU_BOARD> vSimuBoard;
 
 	bool Status = false;		// Estado de conexion			
 
@@ -99,19 +111,33 @@ protected:
 	// Coontr
 	void Th_loop_recepcion();
 	void Th_Loop_Envio_a_Placa();
+	
 	void Th_Loop_Envio_a_Sim_P3D();
-	// Valores a enviar a placa
+	void Th_Loop_Envio_a_Sim_PMDG();
+	// Valores a enviar a placa P3D Y PMDG	
 	queue<string> Co_Comando;
 	queue<string> Co_aPlaca;
-	queue<string> Co_Valor;
-	// Valores para envio al simu P3D
+	queue<string> Co_Valor_Comando;
+	queue<string> Co_Valor_aPlaca;
+	// Valores para envio al simu P3D		
 	queue<int>		Co_Comando_aSim_P3D;
 	queue<string>	Co_Definicion_aSim_P3D;
 	queue<double>	Co_Valor_aSim_P3D;
+	queue<bool>		Co_Mapeo_aSim_P3D;
+	queue<int>		Co_Min_In_aSim_P3D;
+	queue<int>		Co_Max_In_aSim_P3D;
+	queue<int>		Co_Min_Out_aSim_P3D;
+	queue<int>		Co_Max_Out_aSim_P3D;
+	// Valores para envio al simu PMDG		
+	queue<int>		Co_Comando_aSim_PMDG;
+	queue<string>	Co_Definicion_aSim_PMDG;
+	queue<int>		Co_Valor_aSim_PMDG;
+
 
 	// Evento
 	static void Function_Empty(string Comando, string Definicion, string Valor);
-	void (*Function_Reception)(string Comando, string aPlaca, string Valor) = Function_Empty;		// A un puntero de funcion solo se puede asignar una funcion estatica
+	static void Function_Empty(string Comando, string aPlaca, string Valor_Comando, string Valor_aPlaca);
+	void (*Function_Reception)(string Comando, string aPlaca, string Valor_Comando, string Valor_aPlaca) = Function_Empty;		// A un puntero de funcion solo se puede asignar una funcion estatica
 	void (*Function_Send)(string Comando, string Definicion, string Valor) = Function_Empty;		// A un puntero de funcion solo se puede asignar una funcion estatica
 
 public:
@@ -121,8 +147,8 @@ public:
 	void Disconnect();			// Disconect
 	void Send(string Comando, string Valor);	// Enviar datos al simu
 	void ScreenMessage(std::string Message);	// to send message to the P3D Screen
-	std::vector <EST_BOARD_SIMU> Get_Board_Simu();
-	std::vector <EST_SIMU_BOARD> Get_Simu_Board();
+	std::vector <ST_BOARD_SIMU> Get_Board_Simu();
+	std::vector <ST_SIMU_BOARD> Get_Simu_Board();
 	// Metodos				
 	void Activate_After_Overhead();
 	void Activate_Fordward_Overhead();
@@ -137,11 +163,11 @@ public:
 	void Deactivate_Low_Fordward_Panel();
 	void Deactivate_Control_Stand();
 	// Asignar Eventos		
-	void Assign_Event_Reception(void(*Function)(string Comando, string aPlaca, string Valor));
+	void Assign_Event_Reception(void(*Function)(string Comando, string aPlaca, string Valor_Comando, string Valor_aPlaca));
 	void Assign_Event_Send(void(*Function)(string Comando, string Definicion, string Valor));
 	// Evento				
 	void Event_Reception_P3D(int Id, string Valor);
-	void Event_Reception(string Comando, string Valor);
+	void Event_Reception_PMDG(string Comando, string Valor);
 	//void Event_Send(string Comando, string Definicion, string Valor);
 
 };

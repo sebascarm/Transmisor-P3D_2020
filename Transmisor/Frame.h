@@ -169,10 +169,10 @@ void CrearObjetos(HINSTANCE hInstance) {
 	//Grupo 7
 	int Alto = Frame1->Get_Height() - 220;
 	int Ancho = Frame1->Get_Width() - 15;
-	int Ancho1 = (int)(Ancho * 4 / 12);
+	int Ancho1 = (int)(Ancho * 4.5 / 12);
 	int Ancho2 = (int)(Ancho * 2.5 / 12);
 	int Ancho3 = (int)(Ancho * 2.5 / 12);
-	int Ancho4 = (int)(Ancho * 3 / 12);
+	int Ancho4 = (int)(Ancho * 2.5 / 12);
 	int X1 = 10;
 	int X2 = X1 + Ancho1;
 	int X3 = X2 + Ancho2;

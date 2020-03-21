@@ -1,8 +1,9 @@
 //######################################################//
-// P3D V 2.4											//
+// P3D V 3.0											//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 18/03/2020                                           //
+// 21/03/2020                                           //
+// Envio completo										//
 // Uso de decimales										//
 // Mejoras de lectura de archivo y evento de recepcion	//
 // Enviar datos al simulador							//
@@ -36,16 +37,17 @@
 using namespace std;	
 
 
-struct EST_BOARD_SIMU {
+struct ST_BOARD_SIMU {
 	int ID;
 	string Board;
 	string Simu;
 };
 
-struct EST_SIMU_BOARD {
+struct ST_SIMU_BOARD {
 	string Simu;
 	string Board;
 };
+
 
 
 class P3D {
@@ -53,6 +55,7 @@ public:
 	virtual bool Connect() = 0;								// return true if conect ok
 	virtual void Disconnect() = 0;
 	virtual void ScreenMessage(std::string Message) = 0;	// to send message to the P3D Screen
+	// Use value "UP" for mouse weel UP, and "DOWN" for mouse weel down
 	virtual void Send(string Comando, string Valor) = 0;	// Enviar datos al simu
 	// Metodos											
 	virtual void Activate_After_Overhead() = 0;
@@ -68,9 +71,9 @@ public:
 	virtual void Deactivate_Low_Fordward_Panel() = 0;
 	virtual void Deactivate_Control_Stand() = 0;
 	// return list of elemento from board to simulator	
-	virtual std::vector <EST_BOARD_SIMU> Get_Board_Simu() = 0;
-	virtual std::vector <EST_SIMU_BOARD> Get_Simu_Board() = 0;
-	virtual	void Assign_Event_Reception(void(*Function)(string Comando, string aPlaca, string Valor)) = 0;
+	virtual std::vector <ST_BOARD_SIMU> Get_Board_Simu() = 0;
+	virtual std::vector <ST_SIMU_BOARD> Get_Simu_Board() = 0;
+	virtual	void Assign_Event_Reception(void(*Function)(string Comando, string aPlaca, string Valor_Comando, string Valor_aPlaca)) = 0;
 	virtual void Assign_Event_Send(void(*Function)(string Comando, string Definicion, string Valor)) = 0;
 
 };
