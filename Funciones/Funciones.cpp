@@ -203,24 +203,34 @@ namespace Funciones {
 		}
 		return Data;
 	}
-
+	
 	//******************************************************
 	//**** DIVIDIR CADENA (MEJORADO)					****
 	//******************************************************
 	std::vector<std::string> Split_String(const std::string& Cadena, char Divisor) {
-		std::vector<std::string> tokens;
-		std::string token;
-		std::istringstream tokenStream(Cadena);
-		while (std::getline(tokenStream, token, Divisor)){
-			Clear_Text(token);
-			tokens.push_back(token);
+		std::vector<std::string> vec_text;
+		std::string texto;
+		std::istringstream Cadena_Stream(Cadena);
+		while (std::getline(Cadena_Stream, texto, Divisor)){
+			Clear_Text(texto);
+			vec_text.push_back(texto);
 		}
-		return tokens;
+		return vec_text;
 	}
-
+	std::string Split_String(const std::string& Cadena, char Divisor, int Elemento) {
+		std::vector<std::string> vec_text;
+		vec_text = Split_String(Cadena, Divisor);
+		if (vec_text.size() > Elemento) {
+			return vec_text[Elemento];
+		} else {
+			return "";
+		}
+	}
 	
 
-	//Limpia basura (TAB) y espacios
+	//******************************************************
+	//**** Limpia basura (TAB y Espacios)				****
+	//******************************************************
 	void Clear_Text(string& Data) {
 		RemplazarSTR(Data, "\t", " ");
 		Trim(Data);
@@ -234,6 +244,10 @@ namespace Funciones {
 		return Resul;
 	}
 	double Mapeo(double Value, int Min1, int Max1, int Min2, int Max2) {
+		double Resul = ((Value - Min1) * (Max2 - Min2) / (Max1 - Min1)) + Min2;
+		return Resul;
+	}
+	double Mapeo(double Value, double Min1, double Max1, int Min2, int Max2) {
 		double Resul = ((Value - Min1) * (Max2 - Min2) / (Max1 - Min1)) + Min2;
 		return Resul;
 	}

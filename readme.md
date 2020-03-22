@@ -1,3 +1,10 @@
+Transmisor P3D 2020 v1.2.4
+* 21/03/2020
+    * Funciones     v1.5 (Funcion Split para string)
+    * P3D           v3.1 (Envio a placa con mapeo)
+    * WinApi        v2.5 (Doble Click en ListBox)
+        * ListBox   v2.1 (Doble Click)
+
 Transmisor P3D 2020 v1.2.3
 =====================
 * 21/03/2020

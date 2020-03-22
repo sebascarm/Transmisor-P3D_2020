@@ -1,8 +1,9 @@
 //######################################################//
-// P3D V 3.0											//
+// P3D V 3.1											//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
 // 21/03/2020                                           //
+// Envio a Placa con Mapeo								//
 // Envio completo										//
 // Uso de decimales										//
 // Mejoras de lectura de archivo y evento de recepcion	//

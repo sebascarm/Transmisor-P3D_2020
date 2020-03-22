@@ -10,11 +10,13 @@ void Event_Conexion_Sim() {
 		RichSimu->TextLine("Conexion establecida");
 		// Habilitar botones
 		// Deshabilitar elementos
+		Boton_AftOverHead->Set_Enable();
+		Boton_FwdOverHead->Set_Enable();
 		Boton_GlareShield->Set_Enable();
-		Boton_MCP->Set_Enable();
-		Boton_MIP->Set_Enable();
-		Boton_YOK->Set_Enable();
-		Boton_FIR->Set_Enable();
+		Boton_FwdPanel->Set_Enable();
+		Boton_LowPanel->Set_Enable();
+		Boton_ContStand->Set_Enable();
+
 		Boton_a_Sim->Set_Enable();
 		Boton_de_Sim->Set_Enable();
 		Boton_a_Placa1->Set_Enable();
@@ -24,7 +26,7 @@ void Event_Conexion_Sim() {
 	}
 	else {
 		RichSimu->TextLine("Conexion no establecida");
-		
+
 	}
 }
 
@@ -32,11 +34,13 @@ void Event_Desconexion_Sim() {
 	Prep3d->Disconnect();
 	RichSimu->TextLine("Conexion cerrada");
 	// Deshabilitar elementos
+	Boton_AftOverHead->Set_Disable();
+	Boton_FwdOverHead->Set_Disable();
 	Boton_GlareShield->Set_Disable();
-	Boton_MCP->Set_Disable();
-	Boton_MIP->Set_Disable();
-	Boton_YOK->Set_Disable();
-	Boton_FIR->Set_Disable();
+	Boton_FwdPanel->Set_Disable();
+	Boton_LowPanel->Set_Disable();
+	Boton_ContStand->Set_Disable();
+
 	Boton_a_Sim->Set_Disable();
 	Boton_de_Sim->Set_Disable();
 	Boton_a_Placa1->Set_Disable();
@@ -72,18 +76,39 @@ void Event_Send_P3D(string Comando, string Definicion, string Valor) {
 	RichSimu->ColorTextEnd(">> " + Definicion + "(" + Comando + ") = " + Valor, RGB(0, 150, 0));
 }
 
-void Event_Activar_GlShield() {
+void Event_Activar_After_Overhead() {
+	RichSimu->TextLine("AFTER OVER HEAD: ADIRU, PSEU (ENGINE, OXYGEN, ETC)");
+	Prep3d->Activate_After_Overhead();
+}
+void Event_Activar_Fordward_Overhead() {
+	RichSimu->TextLine("FORDWARD OVER HEAD: FLIGHT CONTROLS, NAVEGATION, FUEL, ELECTRICAL, APU, ETC");
+	Prep3d->Activate_Fordward_Overhead();
+}
+void Event_Activar_Glareshield() {
+	RichSimu->TextLine("GLARE SHIELD: WARNINGS, EFIS, MCP");
 	Prep3d->Activate_Glareshield();
 }
+void Event_Activar_Fordward_Panel() {
+	RichSimu->TextLine("FORDWARD PANEL: CENTRAL PANEL");
+	Prep3d->Activate_Fordward_Panel();
+}
+void Event_Activar_Low_Fordward_Panel() {
+	RichSimu->TextLine("LOW FORDWARD PANEL: LOWER CENTRAL PANEL");
+	Prep3d->Activate_Low_Fordward_Panel();
+}
+void Event_Activar_Control_Stand() {
+	RichSimu->TextLine("CONTROL STAND: CDU, FIRE, CARGO, COMM, FMC, SP2, OTHERS ");
+	Prep3d->Activate_Control_Stand();
+}
 
-void Test() {
+void Test2() {
 	string Comando, Valor;
 	Comando = "THR_SENG1";
 	Valor = "50";
 	RichSimu->ColorTextEnd("-> " + Comando + " = " + Valor, RGB(0, 150, 150));
 	Prep3d->Send(Comando, Valor);
 }
-void Test2() {
+void Test1() {
 	string Comando, Valor;
 	for (int i = 0; i < 50; i++) {
 		Comando = "MCP_COUR1";
@@ -97,6 +122,21 @@ void Test2() {
 		Prep3d->Send(Comando, Valor);
 	}
 }
+
+void Event_List_DobleClick() {
+	string Text;
+	Text = Funciones::Split_String(ListBoardSimu->Get_Text(), '-',0);
+	Text_Enviar->Set_Text(Text + "=");
+}
+
+void Click_aSim() {
+	string Comando, Valor;
+	Comando = Funciones::Split_String(Text_Enviar->Get_Text(), '=', 0);
+	Valor = Funciones::Split_String(Text_Enviar->Get_Text(), '=', 1);
+	RichSimu->ColorTextEnd("-> " + Comando + " = " + Valor, RGB(0, 150, 150));
+	Prep3d->Send(Comando, Valor);
+}
+
 //******************************************************************//
 //**** ASIGNACION DE EVENTOS									****//
 //******************************************************************//
@@ -105,14 +145,22 @@ void  Eventos() {
 	Frame1->Assign_Event_Resize(Event_Resize);
 	Boton_Sim_Conect->Assign_Event_Click(Event_Conexion_Sim);
 	Boton_Sim_DesCon->Assign_Event_Click(Event_Desconexion_Sim);
-	Boton_GlareShield->Assign_Event_Click(Event_Activar_GlShield);
+	
+	Boton_AftOverHead->Assign_Event_Click(Event_Activar_After_Overhead);
+	Boton_FwdOverHead->Assign_Event_Click(Event_Activar_Fordward_Overhead);
+	Boton_GlareShield->Assign_Event_Click(Event_Activar_Glareshield);
+	Boton_FwdPanel->Assign_Event_Click(Event_Activar_Fordward_Panel);
+	Boton_LowPanel->Assign_Event_Click(Event_Activar_Low_Fordward_Panel);
+	Boton_ContStand->Assign_Event_Click(Event_Activar_Control_Stand);
+			
+	ListBoardSimu->Assign_Event_DobleClick(Event_List_DobleClick);
 
 	Prep3d->Assign_Event_Reception(Event_Recep_P3D);
 	Prep3d->Assign_Event_Send(Event_Send_P3D);
 	//Prep3d.aas
 
 	// Test
-	Boton_a_Sim->Assign_Event_Click(Test);
+	Boton_a_Sim->Assign_Event_Click(Click_aSim);
 	Boton_de_Sim->Assign_Event_Click(Test2);
 
 }
@@ -134,7 +182,7 @@ void Configurar_objetos() {
 		string ID = to_string(vecBoarSimu[i].ID);
 		string Board = vecBoarSimu[i].Board;
 		string Simu = vecBoarSimu[i].Simu;
-		ListBoardSimu->Add_Line(ID + " - " + Board + " -> " + Simu);
+		ListBoardSimu->Add_Line(Board + " -> " + Simu + " (" + ID + ")");
 	}
 	// Cargar List Box Simu Board
 	std::vector <ST_SIMU_BOARD> vecSimuBoard;
@@ -146,11 +194,13 @@ void Configurar_objetos() {
 		ListSimuBoard->Add_Line(Simu + " -> " + Board);
 	}
 	// Deshabilitar elementos
+	Boton_AftOverHead->Set_Disable();
+	Boton_FwdOverHead->Set_Disable();
 	Boton_GlareShield->Set_Disable();
-	Boton_MCP->Set_Disable();
-	Boton_MIP->Set_Disable();
-	Boton_YOK->Set_Disable();
-	Boton_FIR->Set_Disable();
+	Boton_FwdPanel->Set_Disable();
+	Boton_LowPanel->Set_Disable();
+	Boton_ContStand->Set_Disable();
+
 	Boton_a_Sim->Set_Disable();
 	Boton_de_Sim->Set_Disable();
 	Boton_a_Placa1->Set_Disable();

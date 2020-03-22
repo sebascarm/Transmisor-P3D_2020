@@ -83,7 +83,8 @@ LRESULT CALLBACK C_WinApi::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 	//static WindowsMessageMap mm;							
 	//OutputDebugString(mm(msg, lParam, wParam).c_str());	
 	
-	int ID = LOWORD(wParam);
+	int ID = LOWORD(wParam);			// Identificador del controlr
+	int Notificacion = HIWORD(wParam);	// Codigo de notificacion recibida (ej: click, doble click)
 	int Elementos = (int)CONTENEDOR.size();
 	
 	switch (msg) {
@@ -125,10 +126,13 @@ LRESULT CALLBACK C_WinApi::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 			if (CONTENEDOR[i].Tipo == TipoObjeto::T_LISTBOX) {
 				// Buscamos el list que recibe el evento	
 				if (CONTENEDOR[i].Get_ID() == ID) {
-					// Buscamos el evento					
-					if (LBN_SELCHANGE == HIWORD(wParam)) {
+					// Buscamos el evento (SELL CHANGE)		
+					if (LBN_SELCHANGE == Notificacion) {
 						// Cambio de celda					
 						CONTENEDOR[i].pListBox->Event_ChangeCell();
+					} else if (LBN_DBLCLK == Notificacion) {
+						// Cambio de celda	(DOBLE CLICK)	
+						CONTENEDOR[i].pListBox->Event_DobleClick();
 					}
 				}
 			}

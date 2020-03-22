@@ -1,8 +1,9 @@
 //######################################################//
-// List Box v2.0										//
+// List Box v2.1										//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 08/03/2020                                           //
+// 21/03/2020                                           //
+// Doble click											//
 // SetFont												//
 // Creacion                                             //
 //######################################################//
@@ -13,6 +14,7 @@
 class C_ListBox:public Win_ListBox, public C_Objeto {
 protected:
 	void (*Function_ChangeCell)() = Function_Empty;
+	void (*Function_DobleClick)() = Function_Empty;
 public:
 	void Create(Win_Frame* pFrame, int x, int y, int ancho, int alto);
 	// Propiedades			
@@ -28,8 +30,10 @@ public:
 	void	Add_Line(string Texto);
 	// Asignar Eventos		
 	void	Assign_Event_ChangeCell(void(*Function)());
+	void	Assign_Event_DobleClick(void(*Function)());
 	// Evento				
 	void	Event_ChangeCell();
+	void	Event_DobleClick();
 };
 
 

@@ -15,9 +15,15 @@ int C_ListBox::Get_Row() {
 }
 
 string C_ListBox::Get_Text() {
-	string text;
+	//string text;
+	char* text;
+	int length;
 	int row = this->Get_Row();
-	SendMessage(hWnd, LB_GETTEXT, row, (LPARAM)text.c_str());
+	
+	length = SendMessage(hWnd, LB_GETTEXTLEN, (WPARAM)row, 0);
+	text = new char[length + 1];
+	SendMessage(hWnd, LB_GETTEXT, (WPARAM)row, (LPARAM)text);
+	//SendMessage(hWnd, LB_GETTEXT, row, (LPARAM)text);
 	return text;
 }
 
@@ -31,6 +37,10 @@ void C_ListBox::Add_Line(string Texto) {
 void C_ListBox::Assign_Event_ChangeCell(void(*Function)()) {
 	Function_ChangeCell = Function;
 }
+void C_ListBox::Assign_Event_DobleClick(void(*Function)()) {
+	Function_DobleClick = Function;
+}
+
 
 //*********************************************
 //*** EVENTO	 (El loop debe llamarlo)	***
@@ -38,6 +48,9 @@ void C_ListBox::Assign_Event_ChangeCell(void(*Function)()) {
 //*********************************************
 void C_ListBox::Event_ChangeCell() {
 	Function_ChangeCell();
+}
+void C_ListBox::Event_DobleClick() {
+	Function_DobleClick();
 }
 
 

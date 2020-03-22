@@ -99,7 +99,19 @@ void P3D_Base::Cargar() {
 	// READ_P3D  | GENERAL ENG THROTTLE LEVER POSITION:1 | percent  | 2THR_SENG1 | 0
 	while (ArchivoP3D->Read_LineVec(Datos, '|')) {
 		if (Datos[0] == "READ_P3D") {
-			this->Map_P3D_Read[ID] = { Datos[1], Datos[2], Datos[3], Datos[4] };
+			// Mapeo de ser necesario
+			if ((Datos.size() > 6) && (Datos[5] == "MAPEO")) {
+				this->Map_P3D_Read[ID] = {
+					Datos[1], Datos[2], Datos[3], Datos[4],
+					true,
+					Funciones::To_Double(Datos[6]),
+					Funciones::To_Double(Datos[7]),
+					Funciones::To_Integer(Datos[8]),
+					Funciones::To_Integer(Datos[9])
+				};
+			} else {
+				this->Map_P3D_Read[ID] = {Datos[1], Datos[2], Datos[3], Datos[4], false};
+			}
 			ID++;
 		}
 	}
@@ -116,20 +128,38 @@ void P3D_Base::Cargar() {
 			this->Map_PMDG_Read[Datos[1]] = { Datos[2], Datos[3] };
 		}
 	}
-	// Cargar vector								
+	// Cargar vector (board a sim) P3D				
+	ST_BOARD_SIMU Bs;
 	Buscador_P3D_Write = Map_P3D_Write.begin();
 	while (Buscador_P3D_Write != Map_P3D_Write.end()) {
-		ST_BOARD_SIMU Bs;
 		Bs.ID = Buscador_P3D_Write->second.A_ID;
 		Bs.Board = Buscador_P3D_Write->first;
 		Bs.Simu = Buscador_P3D_Write->second.B_aSimulador;
 		vBoardSimu.push_back(Bs);
 		Buscador_P3D_Write++;
 	}
+	// Cargar vector (board a sim) PMDG				
+	Buscador_PMDG_Write = Map_PMDG_Write.begin();
+	while (Buscador_PMDG_Write != Map_PMDG_Write.end()) {
+		Bs.ID = Buscador_PMDG_Write->second.B_Comando;
+		Bs.Board = Buscador_PMDG_Write->first;
+		Bs.Simu = Buscador_PMDG_Write->second.A_Definicion;
+		vBoardSimu.push_back(Bs);
+		Buscador_PMDG_Write++;
+	}
+
+	// Cargar vector READ P3D						
+	ST_SIMU_BOARD Sb;
+	Buscador_P3D_Read = Map_P3D_Read.begin();
+	while (Buscador_P3D_Read != Map_P3D_Read.end()) {
+		Sb.Simu = Buscador_P3D_Read->second.A_Evento;
+		Sb.Board = Buscador_P3D_Read->second.C_Respuesta;
+		vSimuBoard.push_back(Sb);
+		Buscador_P3D_Read++;
+	}
 	// Cargar vector READ PMDG						
 	Buscador_PMDG_Read = Map_PMDG_Read.begin();
 	while (Buscador_PMDG_Read != Map_PMDG_Read.end()) {
-		ST_SIMU_BOARD Sb;
 		Sb.Simu = Buscador_PMDG_Read->first;
 		Sb.Board = Buscador_PMDG_Read->second.A_Respuesta;
 		vSimuBoard.push_back(Sb);
@@ -417,17 +447,27 @@ void P3D_Base::Assign_Event_Send(void(*Function)(string Comando, string Definici
 //*** EVENTO (ENVIO A PLACA) P3D			***
 //*********************************************
 void P3D_Base::Event_Reception_P3D(int Id, string Valor) {
+	double ValorD;
 	//Buscamos el Comando para obtener el equivalente a enviar a la placa
 	Buscador_P3D_Read = Map_P3D_Read.find(Id);
 	if (Buscador_P3D_Read != Map_P3D_Read.end()) {
-		// Encontrado encolamos	
+		ValorD = Funciones::To_Double(Valor);
+		// Mapeo de ser necesario			
+		if (Buscador_P3D_Read->second.E_Mapeo) {
+			ValorD = Funciones::Mapeo(
+				ValorD,
+				Buscador_P3D_Read->second.F_Min_In,
+				Buscador_P3D_Read->second.G_Max_In,
+				Buscador_P3D_Read->second.H_Min_Out,
+				Buscador_P3D_Read->second.I_Max_Out
+				);
+		}
+		// redondeamos	de ser necesario	
 		if (Buscador_P3D_Read->second.D_Decimales != "") {
-			// redondeamos		
 			int Decimales = Funciones::To_Integer(Buscador_P3D_Read->second.D_Decimales);
-			double ValorD = Funciones::To_Double(Valor);
 			Co_Valor_aPlaca.push(Funciones::a_String_red(ValorD, Decimales));
 		} else {
-			Co_Valor_aPlaca.push(Valor);
+			Co_Valor_aPlaca.push(to_string(ValorD));
 		}
 		Co_Valor_Comando.push(Valor);
 		Co_aPlaca.push(Buscador_P3D_Read->second.C_Respuesta);
@@ -455,7 +495,6 @@ void P3D_Base::Event_Reception_PMDG(string Comando, string Valor) {
 		Co_Comando.push(Comando);
 	}
 }
-
 
 //*********************************************
 //*** TH LOOP DE ENVIO A PLACA (P3D Y PMDG)	***

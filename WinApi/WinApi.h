@@ -1,8 +1,9 @@
 //######################################################//
-// WIN API v2.4											//
+// WIN API v2.5											//
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
-// 18/03/2020                                           //
+// 21/03/2020                                           //
+// List Box con doble click								//
 // RichText con SetFont									//
 // Habilitar y deshabilitar objetos						//
 // ListBox v2.0											//
@@ -137,6 +138,7 @@ public:
 	virtual void	Add_Line(string Texto) = 0;
 	// Asignacion de evento				
 	virtual void	Assign_Event_ChangeCell(void(*Function)()) = 0;
+	virtual void	Assign_Event_DobleClick(void(*Function)()) = 0;
 };
 // RICH TEXT		
 class Win_RichText {

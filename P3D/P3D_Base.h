@@ -18,6 +18,11 @@ struct ST_A_PLACA_P3D {
 	string B_TipoDato;
 	string C_Respuesta;
 	string D_Decimales;
+	bool   E_Mapeo;
+	double F_Min_In;
+	double G_Max_In;
+	int	   H_Min_Out;
+	int	   I_Max_Out;
 };
 
 struct ST_A_PLACA_PMDG {
@@ -119,6 +124,11 @@ protected:
 	queue<string> Co_aPlaca;
 	queue<string> Co_Valor_Comando;
 	queue<string> Co_Valor_aPlaca;
+	queue<bool>	  Co_Mapeo_aPlaca;
+	queue<int>	  Co_Min_In_aPlaca;
+	queue<int>	  Co_Max_In_aPlaca;
+	queue<int>	  Co_Min_Out_aPlaca;
+	queue<int>	  Co_Max_Out_aPlaca;
 	// Valores para envio al simu P3D		
 	queue<int>		Co_Comando_aSim_P3D;
 	queue<string>	Co_Definicion_aSim_P3D;

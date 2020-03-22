@@ -55,11 +55,12 @@ Win_TextBox* Text_Mediador = New_TextBox();
 Win_TextBox* Text_PortMedia = New_TextBox();
 Win_Button* Boton10 = New_Button();
 //Grupo4
+Win_Button* Boton_AftOverHead = New_Button();
+Win_Button* Boton_FwdOverHead = New_Button();
 Win_Button* Boton_GlareShield = New_Button();
-Win_Button* Boton_MCP = New_Button();
-Win_Button* Boton_MIP = New_Button();
-Win_Button* Boton_YOK = New_Button();
-Win_Button* Boton_FIR = New_Button();
+Win_Button* Boton_FwdPanel = New_Button();
+Win_Button* Boton_LowPanel = New_Button();
+Win_Button* Boton_ContStand = New_Button();
 //Grupo5
 Win_TextBox* Text_Enviar = New_TextBox();
 Win_Button* Boton_a_Sim = New_Button();
@@ -137,11 +138,13 @@ void CrearObjetos(HINSTANCE hInstance) {
 	Boton_Med_Esc->Create(Frame1, "Escuch", 535, 45, 50);
 	Boton10->Create(Frame1, "Desc", 590, 45, 50);
 	//Grupo4
-	Boton_GlareShield->Create(Frame1, "GlShield", 10, 105, 50);
-	Boton_MCP->Create(Frame1, "MCP", 65, 105, 50);
-	Boton_MIP->Create(Frame1, "MIP", 120, 105, 50);
-	Boton_YOK->Create(Frame1, "YOK", 175, 105, 50);
-	Boton_FIR->Create(Frame1, "FIR", 230, 105, 50);
+	Boton_AftOverHead->Create(Frame1, "Aft Head", 10, 105, 65);
+	Boton_FwdOverHead->Create(Frame1, "Fwd Head", 80, 105, 65);
+	Boton_GlareShield->Create(Frame1, "Gl Shield", 150, 105, 65);
+	Boton_FwdPanel->Create(Frame1, "Pwd Panel", 220, 105, 65);
+	Boton_LowPanel->Create(Frame1, "Low Panel", 290, 105, 65);
+	Boton_ContStand->Create(Frame1, "Cont Stand", 360, 105, 65);
+
 	//Grupo5
 	Text_Enviar->Create(Frame1, "", 10, 130, 270);
 	Boton_a_Sim->Create(Frame1, "A Sim", 10, 155, 50);
@@ -185,11 +188,10 @@ void CrearObjetos(HINSTANCE hInstance) {
 
 	//
 	
-
 	//Gupo 8
-	GroupBox5->Create(Frame1,"Comandos" ,655, 5, 370, 195);
-	ListBoardSimu->Create(Frame1, 665, 20, 280, 85);
-	ListSimuBoard->Create(Frame1, 665, 110, 350, 85);
+	GroupBox5->Create(Frame1,"Comandos" ,655, 5, 435, 195);
+	ListBoardSimu->Create(Frame1, 665, 20, 415, 85);
+	ListSimuBoard->Create(Frame1, 665, 110, 415, 85);
 
 }
 

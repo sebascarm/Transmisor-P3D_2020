@@ -1,9 +1,10 @@
 //######################################################//
-// FUNCIONES V 1.4							            //
+// FUNCIONES V 1.5							            //
 //######################################################//
 // ULTIMA MODIFICACION DOCUMENTADA                      //
 // 21/03/2020                                           //
 // Mapeo double											//
+// Funcion Split con string								//
 // Correcion en borrado de comentarios					//
 // Funcion Split de texto en vector						//
 // Funcion de Texto a Double							//
@@ -62,16 +63,14 @@ namespace Funciones {
 	DLLIMPORT bool Texto_vacio(std::string Data);
 	//Suma datos de cadenas (si hay numeros)
 	DLLIMPORT void Sum_String(std::string& Data);
-	//Divide datos entregando textos distintos (se omite el extern "c" para permitir sobrecarga (no se puede usar en C)
-	//DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string Divisor);
-	//DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string Divisor);
-	//DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string& Text4, std::string Divisor);
-	//DLLIMPORT void Divide_Data(std::string Data, std::string& Text1, std::string& Text2, std::string& Text3, std::string& Text4, std::string& Text5, std::string Divisor);
-	// Divide Cadenas y entrega Vector
+	// Divide Cadenas y entrega Vector con todos los elementos
 	DLLIMPORT std::vector<std::string> Split_String(const std::string& Cadena, char Divisor);
+	// Divide Cadenas y entrega un string con el numero de elemento indicado
+	DLLIMPORT std::string Split_String(const std::string& Cadena, char Divisor, int Elemento);
 	//Mapeo de valores	
 	DLLIMPORT int Mapeo(int Value, int Min1, int Max1, int Min2, int Max2);
 	DLLIMPORT double Mapeo(double Value, int Min1, int Max1, int Min2, int Max2);
+	DLLIMPORT double Mapeo(double Value, double Min1, double Max1, int Min2, int Max2);
 	//Logs y debug		
 	DLLIMPORT void Log(std::string Datos, std::string Datos2 = "", std::string Datos3 = "", std::string Datos4 = "", std::string Datos5 = "");
 	DLLIMPORT void Logl(std::string Datos, std::string Datos2 = "", std::string Datos3 = "", std::string Datos4 = "", std::string Datos5 = "");
