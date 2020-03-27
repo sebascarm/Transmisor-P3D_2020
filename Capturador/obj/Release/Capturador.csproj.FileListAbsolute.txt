@@ -1,0 +1,10 @@
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capturador\bin\Release\Capturador.exe.config
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capturador\bin\Release\Capturador.exe
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capturador\bin\Release\Capturador.pdb
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capturador\obj\Release\Capturador.csprojAssemblyReference.cache
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capturador\obj\Release\Capturador.Form.resources
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capturador\obj\Release\Capturador.Properties.Resources.resources
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capturador\obj\Release\Capturador.csproj.GenerateResource.cache
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capturador\obj\Release\Capturador.csproj.CoreCompileInputs.cache
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capturador\obj\Release\Capturador.exe
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capturador\obj\Release\Capturador.pdb

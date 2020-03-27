@@ -1,0 +1,78 @@
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\bin\EasyHook64.dll
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\bin\EasyLoad64.dll
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\bin\EasyHook32.dll
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\bin\EasyHook32Svc.exe
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\bin\EasyHook64Svc.exe
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\bin\EasyLoad32.dll
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\bin\sharpdx_direct3d11_1_effects_x64.dll
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\bin\sharpdx_direct3d11_1_effects_x86.dll
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\bin\Capture.dll
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\bin\Capture.pdb
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\Capture\obj\Debug\Capture.Properties.Resources.resources
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\Capture\obj\Debug\Capture.csproj.GenerateResource.cache
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\Capture\obj\Debug\Capture.csproj.CoreCompileInputs.cache
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\Capture\obj\Debug\Capture.csproj.CopyComplete
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\Capture\obj\Debug\Capture.dll
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\Capture\obj\Debug\Capture.pdb
+Y:\Programacion\tests\Funciona Hook Master\Direct3DHook-master\Direct3DHook-master\Capture\obj\Debug\Capture.csprojAssemblyReference.cache
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\Capture\EasyHook32.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\Capture\EasyHook32Svc.exe
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\Capture\EasyHook64.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\Capture\EasyHook64Svc.exe
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\Capture\EasyLoad32.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\Capture\EasyLoad64.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\Capture\sharpdx_direct3d11_1_effects_x64.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\Capture\sharpdx_direct3d11_1_effects_x86.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\Capture\Capture.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\Capture\Capture.pdb
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.Properties.Resources.resources
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.csproj.GenerateResource.cache
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.csproj.CoreCompileInputs.cache
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.csproj.CopyComplete
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.pdb
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyHook32.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyHook32Svc.exe
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyHook64.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyHook64Svc.exe
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyLoad32.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyLoad64.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\sharpdx_direct3d11_1_effects_x64.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\sharpdx_direct3d11_1_effects_x86.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\Capture.dll
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\Capture.pdb
+D:\QNapDrive\Programacion\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.csprojAssemblyReference.cache
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyHook32.dll
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyHook32Svc.exe
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyHook64.dll
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyHook64Svc.exe
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyLoad32.dll
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\EasyLoad64.dll
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\sharpdx_direct3d11_1_effects_x64.dll
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\sharpdx_direct3d11_1_effects_x86.dll
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\Capture.dll
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\C_Salida\D_Capture\Capture.pdb
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.Properties.Resources.resources
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.csproj.GenerateResource.cache
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.csproj.CoreCompileInputs.cache
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.csproj.CopyComplete
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.dll
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.pdb
+D:\Programacion\Cpp\VSCpp\NewWinApi_2019\WinApi_Final\Capture\obj\Debug\Capture.csprojAssemblyReference.cache
+D:\Programacion\Cpp\Simulador\Transmisor_2020\C_Salida\D_Capture\EasyHook32.dll
+D:\Programacion\Cpp\Simulador\Transmisor_2020\C_Salida\D_Capture\EasyHook32Svc.exe
+D:\Programacion\Cpp\Simulador\Transmisor_2020\C_Salida\D_Capture\EasyHook64.dll
+D:\Programacion\Cpp\Simulador\Transmisor_2020\C_Salida\D_Capture\EasyHook64Svc.exe
+D:\Programacion\Cpp\Simulador\Transmisor_2020\C_Salida\D_Capture\EasyLoad32.dll
+D:\Programacion\Cpp\Simulador\Transmisor_2020\C_Salida\D_Capture\EasyLoad64.dll
+D:\Programacion\Cpp\Simulador\Transmisor_2020\C_Salida\D_Capture\sharpdx_direct3d11_1_effects_x64.dll
+D:\Programacion\Cpp\Simulador\Transmisor_2020\C_Salida\D_Capture\sharpdx_direct3d11_1_effects_x86.dll
+D:\Programacion\Cpp\Simulador\Transmisor_2020\C_Salida\D_Capture\Capture.dll
+D:\Programacion\Cpp\Simulador\Transmisor_2020\C_Salida\D_Capture\Capture.pdb
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capture\obj\Debug\Capture.Properties.Resources.resources
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capture\obj\Debug\Capture.csproj.GenerateResource.cache
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capture\obj\Debug\Capture.csproj.CoreCompileInputs.cache
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capture\obj\Debug\Capture.csproj.CopyComplete
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capture\obj\Debug\Capture.dll
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capture\obj\Debug\Capture.pdb
+D:\Programacion\Cpp\Simulador\Transmisor_2020\Capture\obj\Debug\Capture.csprojAssemblyReference.cache
