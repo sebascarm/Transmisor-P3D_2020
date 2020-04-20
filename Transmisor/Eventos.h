@@ -4,8 +4,24 @@
 
 
 extern P3D* Prep3d;
+extern Socket* Sock;
+
+// test
+void Evento_Estado(int Estado, string Detalle) {
+	Funciones::Debug(to_string(Estado), Detalle);
+}
+void Evento_Input(string Data) {
+
+}
+//
 
 void Event_Conexion_Sim() {
+	// test
+	Sock->Event_Status(Evento_Estado);
+	Sock->Event_Input(Evento_Input);
+	Sock->Listen("127.0.0.1", 6000);
+	//
+
 	if (Prep3d->Connect()) {
 		RichSimu->TextLine("Conexion establecida");
 		// Habilitar botones

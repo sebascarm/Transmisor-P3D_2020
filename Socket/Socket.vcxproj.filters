@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{9a68de3c-9e97-4b97-aa43-067c44bed275}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Clase">
+      <UniqueIdentifier>{ae11c7e3-7d39-4153-87e5-7a38f4ef5fbc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Socket.cpp">
+      <Filter>Clase</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Socket.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Socket.h">
+      <Filter>Clase</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

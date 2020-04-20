@@ -354,8 +354,10 @@ namespace Capture.Hook
         //IntPtr Swap_Principal;
         //IntPtr Swap_Previo = (IntPtr)0;
         IntPtr[] Swap_Array = new IntPtr[10];
+        int[] Loop_Activo_Array = new int[10];
         int Elemento = 0;
         int ID_usar = 1;
+        
         /// <summary>
         /// Our present hook that will grab a copy of the backbuffer when requested. Note: this supports multi-sampling (anti-aliasing)
         /// </summary>
@@ -373,31 +375,58 @@ namespace Capture.Hook
             //Revisamos que no exista previamente y lo cargamos 
             bool Existe = false;
             for (int i = 0; i < Elemento; i++) {
-                if (Swap_Array[i] == swapChainPtr)
-                {
+                if (Swap_Array[i] == swapChainPtr) {
                     Existe = true;
+                    // Ponemos en 0 el activo
+                    Loop_Activo_Array[i] = 0;
                 }
             }
             if (!Existe) {
-                this.DebugMessage("Elemento: " + Elemento.ToString() + " " + swapChainPtr.ToString());
+                this.DebugMessage("Swap nuevo : " + Elemento.ToString() + " : " + swapChainPtr.ToString());
                 Swap_Array[Elemento] = swapChainPtr;
                 Elemento++;
             }
-                
+
+
+            // Incrementamos la actividad de los elementos (sin captura // solo conexion)
+            for (int i = 0; i < Elemento; i++)
+            {
+                Loop_Activo_Array[i]++;
+                //this.DebugMessage(i.ToString() + " " + Loop_Activo_Array[i].ToString());
+                // revisamos si no se paso algun elemento
+                if (Loop_Activo_Array[i] > 30)
+                {
+                    // Elemnto sin recepcion
+                    this.DebugMessage("Swap caido : " + i + " : " + Swap_Array[i].ToString());
+                    // Remover elementos del array
+                    Loop_Activo_Array[i] = 0;
+                    Swap_Array = Swap_Array.Where((val, idx) => idx != i).ToArray();
+                    Elemento--;
+                    // Lista de Elemntos
+                    //string mensaje = "Elementos activos:";
+                    //for (int j = 0; j < Elemento; j++)
+                    //{
+                    //    mensaje = mensaje + "\r\n" + j + " - " + Swap_Array[j].ToString();
+                    //}
+                    //this.DebugMessage(mensaje);
+                }
+            }
+
             try
             {
                 #region Screenshot Request
                 // valor del id 
-                if (this.Request != null)
-                {
+                if (this.Request != null) {
+                    
+
                     if (swapChainPtr == Swap_Array[ID_usar])
                         {
-                        
                         ID_usar++;
                         if (ID_usar > Elemento-1)
                         {
                             ID_usar = 1;
                         }
+                        
                         //this.DebugMessage("Swap DX11 " + swapChainPtr.ToString());
                         //this.DebugMessage("Nuevo ID " + ID_usar.ToString());
 

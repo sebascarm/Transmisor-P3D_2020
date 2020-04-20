@@ -41,22 +41,26 @@
 //#include "WinApi.h"
 #include "Frame.h"
 #include "P3D.h"
+#include "Socket.h"
 #include "Funciones.h"
 #include "Eventos.h"
+
 
 #ifdef _DEBUG
 #pragma comment (lib, "WinApi_d.lib")
 #pragma comment (lib, "P3D_d.lib")
 #pragma comment (lib, "Funciones_d.lib")
+#pragma comment (lib, "Socket_d.lib")
 #else
 #pragma comment (lib, "WinApi.lib")
 #pragma comment (lib, "P3D.lib")
 #pragma comment (lib, "Funciones.lib")
+#pragma comment (lib, "Socket.lib")
 #endif
 
 
 P3D* Prep3d = New_P3D();
-
+Socket* Sock = New_Socket();
 
 int CALLBACK WINAPI WinMain(
 	_In_ HINSTANCE hInstance,
@@ -64,6 +68,9 @@ int CALLBACK WINAPI WinMain(
 	_In_ LPSTR lpszCmdParam,
 	_In_ int nCmdShow)
 {
+	
+	int a = Sock->Get_State();
+
 	CrearObjetos(hInstance);
 	WinApi->Draw();
 	

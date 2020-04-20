@@ -145,8 +145,10 @@ namespace Capture
                 }
 
                 // Prevent an infinite loop
-                if (i > 120) // about 30secs
+                //if (i > 120) // about 30secs
+                if (i > 5) 
                 {
+                    
                     throw new Exception("Could not set process window to the foreground");
                 }
                 i++;

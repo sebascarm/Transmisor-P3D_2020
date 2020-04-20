@@ -26,6 +26,16 @@ namespace Capturador
         const int WM_COMMAND = 0X111;
         const int WM_MOVE = 0x0003;
         // Variables                
+        IntPtr h_Padre;
+        IntPtr[] h_Elemento = new IntPtr[10];
+        IntPtr[] h_Elemento_Ext = new IntPtr[10];
+        IntPtr[] h_Pointer = new IntPtr[10];
+        //     
+        bool Conectado = false;
+        int Elementos = 0;
+        IntPtr Swap_Nuevo = (IntPtr)0;
+        IntPtr Swap_Caido = (IntPtr)0;
+
         int ProcesoId = 0;
         Process _Proceso;
         CaptureProcess _Proceso_Captura;
@@ -36,8 +46,11 @@ namespace Capturador
         List<TextBox> L_TextBox_Elemento = new List<TextBox>();
         List<TextBox> L_TextBox_Key = new List<TextBox>();
         List<TextBox> L_TextBox_hwdn = new List<TextBox>();
+        List<TextBox> L_TextBox_hwdn_Ext = new List<TextBox>();
         List<TextBox> L_TextBox_Point = new List<TextBox>();
         List<RadioButton> L_Radio_Sel = new List<RadioButton>();
+        List<CheckBox> L_Check = new List<CheckBox>();
+        
         //IntPtr[] Swap_Recibido = new IntPtr[10];
         public Form()
         {
@@ -79,6 +92,17 @@ namespace Capturador
             L_TextBox_hwdn.Add(Text_hwnd_9);
             L_TextBox_hwdn.Add(Text_hwnd_10);
 
+            L_TextBox_hwdn_Ext.Add(Text_hwnd_Ext_1);
+            L_TextBox_hwdn_Ext.Add(Text_hwnd_Ext_2);
+            L_TextBox_hwdn_Ext.Add(Text_hwnd_Ext_3);
+            L_TextBox_hwdn_Ext.Add(Text_hwnd_Ext_4);
+            L_TextBox_hwdn_Ext.Add(Text_hwnd_Ext_5);
+            L_TextBox_hwdn_Ext.Add(Text_hwnd_Ext_6);
+            L_TextBox_hwdn_Ext.Add(Text_hwnd_Ext_7);
+            L_TextBox_hwdn_Ext.Add(Text_hwnd_Ext_8);
+            L_TextBox_hwdn_Ext.Add(Text_hwnd_Ext_9);
+            L_TextBox_hwdn_Ext.Add(Text_hwnd_Ext_10);
+
             L_TextBox_Point.Add(Text_Pointer_1);
             L_TextBox_Point.Add(Text_Pointer_2);
             L_TextBox_Point.Add(Text_Pointer_3);
@@ -100,6 +124,18 @@ namespace Capturador
             L_Radio_Sel.Add(Radio_Bot_8);
             L_Radio_Sel.Add(Radio_Bot_9);
             L_Radio_Sel.Add(Radio_Bot_10);
+
+            L_Check.Add(Check_1);
+            L_Check.Add(Check_2);
+            L_Check.Add(Check_3);
+            L_Check.Add(Check_4);
+            L_Check.Add(Check_5);
+            L_Check.Add(Check_6);
+            L_Check.Add(Check_7);
+            L_Check.Add(Check_8);
+            L_Check.Add(Check_9);
+            L_Check.Add(Check_10);
+
         }
 
         // Boton de conexion                                                
@@ -125,63 +161,49 @@ namespace Capturador
             Thread.Sleep(10);
             //Revisamos si capturo el proceso
             if (_Proceso_Captura == null) {
-                MessageBox.Show("Ejecutable no encontrado: '" + exeName + "'");
+                //MessageBox.Show("Ejecutable no encontrado: '" + exeName + "'");
+                Log("Ejecutable no encontrado: '" + exeName + "'");
             } else {
-                Boton_Connect.Enabled = false;
-                Boton_Desconnect.Enabled = true;
-                Boton_Capture.Enabled = true;
+                Conectado = true;
+                //Boton_Connect.Enabled = false;
+                //Boton_Desconnect.Enabled = true;
+                //Boton_Capture.Enabled = true;
             }
         }
         // BOTON Desconexion                                                      
         private void Boton_Desconnect_Click(object sender, EventArgs e) {
-            
-            if (_Proceso_Captura != null)
-            {
+            if (_Proceso_Captura != null) {
                 HookManager.RemoveHookedProcess(ProcesoId);
                 _Proceso_Captura.CaptureInterface.Disconnect();
                 _Proceso_Captura = null;
                 //Estado del boton              
                 Boton_Connect.Enabled = true;
                 Boton_Desconnect.Enabled = false;
-
             }
-
         }
-        // BOTON Descapturar                                                     
-        private void Stop_Click(object sender, EventArgs e)
-        {
-            Capturando = false;
-        }
-
-        // BOTON Capturar                                                        
+        // BOTON Capturar                                                      
         private void Boton_Capture_Click(object sender, EventArgs e) {
             Capturando = true;
             Capturar();
         }
-
+        // BOTON Descapturar                                                   
+        private void Stop_Click(object sender, EventArgs e) {
+            Capturando = false;
+        }
+        // BOTON Obtener el hwnd Principal                                     
         private void Boton_Get_hwnd_Click(object sender, EventArgs e) {
-            IntPtr Padre;
-            Padre = Obtener_Proceso(Text_ClassName.Text, Text_WindowName.Text);
-            Text_hwnd.Text = Padre.ToString();
+            h_Padre = Obtener_Proceso(Text_ClassName.Text, Text_WindowName.Text);
+            Text_hwnd.Text = h_Padre.ToString();
             // habilitamos botones
             Boton_Send_Key.Enabled = true;
             Boton_Set_Out.Enabled = true;
             Boton_Get_Chil_hwnd.Enabled = true;
             Boton_GetPoint.Enabled = true;
         }
-        // Obtener el Hwnd Externo
-        private void Boton_hwndExt_Click(object sender, EventArgs e)
-        {
-            IntPtr Hijo;
-            Hijo = Obtener_Proceso(Text_WindowFloat.Text, L_TextBox_Elemento[0].Text);
-            L_TextBox_hwdn[0].Text  = Hijo.ToString();
-        }
-
+        // BOTON Enviar Tecla                                                  
         private void Boton_Send_Key_Click(object sender, EventArgs e) {
-            IntPtr Padre;
-            Padre = (IntPtr)int.Parse(Text_hwnd.Text);
             // Poner en foreground el programa  
-            SetForegroundWindow(Padre);
+            SetForegroundWindow(h_Padre);
             // enviamos el teclado              
             for (int i = 0; i < 10; i++) {
                 if (L_Radio_Sel[i].Checked) {
@@ -190,48 +212,54 @@ namespace Capturador
             }
             SendKeys.Flush();
         }
-
-        // BOTON Hide                                                           
-        private void Boton_Hide_Click(object sender, EventArgs e)
-        {
-            IntPtr Padre;
-            IntPtr Hijo;
-            IntPtr PadreExt = FindWindow(Text_WindowFloat.Text, L_TextBox_hwdn[0].Text);
-            Hijo = (IntPtr)int.Parse(L_TextBox_hwdn[0].Text);
-            Padre = (IntPtr)int.Parse(Text_hwnd.Text);
-            //SetForegroundWindow(Hijo);
-            //Hijo = (IntPtr)001617E4;
-            SetWindowPos(Hijo, (IntPtr)0, 100, 100, 200, 400, 0);
-
-            //SendMessage(Hijo, WM_MOVE, (IntPtr)(long)0x0, MakeLParam(50, 100));
-            //IntPtr PadreTmp = FindWindow("FS98FLOAT", L_TextBox_Elemento[0].Text);
-            //IntPtr HijoTmp = FindWindowEx(PadreTmp, IntPtr.Zero, null, L_TextBox_Elemento[0].Text);
-
-
-            MoveWindow(Hijo, 0, 0, 200, 200, true);
-        }
-        private void Boton_Set_Out_Click(object sender, EventArgs e)
-        {
+        // BOTON Obtener el hwnd del elemento                                   
+        private void Boton_Get_Chil_hwnd_Click(object sender, EventArgs e) {
             for (int i = 0; i < 10; i++) {
                 if (L_Radio_Sel[i].Checked) {
-                    Desacoplar((IntPtr)int.Parse(L_TextBox_hwdn[i].Text), L_TextBox_Elemento[i].Text, Text_WindowFloat.Text);
+                    h_Elemento[i]= Obtener_Sub_Proceso(h_Padre, L_TextBox_Elemento[i].Text, Text_WindowFloat.Text);
+                    L_TextBox_hwdn[i].Text = h_Elemento[i].ToString();
+                }
+            }
+        }
+        // BOTON Desacoplar ventana                                             
+        private void Boton_Set_Out_Click(object sender, EventArgs e) {
+            for (int i = 0; i < 10; i++) {
+                if (L_Radio_Sel[i].Checked) {
+                    Desacoplar(h_Elemento[i], L_TextBox_Elemento[i].Text, Text_WindowFloat.Text);
                 }
             }
             SendKeys.Flush();
         }
 
-        private void Boton_Get_Chil_hwnd_Click(object sender, EventArgs e) {
-            IntPtr Padre = (IntPtr)int.Parse(Text_hwnd.Text);
-            IntPtr Hijo;
+        // Obtener el Hwnd Externo del Elemento                                  
+        private void Boton_hwndExt_Click(object sender, EventArgs e) {
             for (int i = 0; i < 10; i++) {
                 if (L_Radio_Sel[i].Checked) {
-                    Hijo = Obtener_Sub_Proceso(Padre, L_TextBox_Elemento[i].Text, Text_WindowFloat.Text);
-                    L_TextBox_hwdn[i].Text = Hijo.ToString();
+                    h_Elemento_Ext[i] = Obtener_Proceso(Text_WindowFloat.Text, L_TextBox_Elemento[i].Text);
+                    L_TextBox_hwdn_Ext[i].Text = h_Elemento_Ext[i].ToString();
                 }
             }
         }
 
-        // Obtener proceso                                  
+        // BOTON Hide                                                           
+        private void Boton_Hide_Click(object sender, EventArgs e) {
+            for (int i = 0; i < 10; i++) {
+                if (L_Radio_Sel[i].Checked) {
+                    SetWindowPos(h_Elemento_Ext[i], (IntPtr)0, 100, 1200, 300, 300, 0);
+                    //MoveWindow(h_Elemento_Ext[i], 0, 0, 200, 200, true);
+                }
+            }
+        }
+        // BOTON UN Hide                                                           
+        private void Boton_UnHide_Click(object sender, EventArgs e) {
+            for (int i = 0; i < 10; i++) {
+                if (L_Radio_Sel[i].Checked) {
+                    SetWindowPos(h_Elemento_Ext[i], (IntPtr)0, 100, 100, 300, 300, 0);
+                }
+            }
+        }
+
+        // Obtener proceso                                                      
         IntPtr Obtener_Proceso(string ClassName, string WindowName) {
             IntPtr Padre;
             Padre = FindWindow(ClassName, WindowName);
@@ -277,10 +305,30 @@ namespace Capturador
 
         //LLamadas de callback (Mensaje)                             
         void CallBack_Mesajes_Captura(MessageReceivedEventArgs message) {
+            // escribimos en log
             Text_Log.Invoke(new MethodInvoker(delegate () {
                 Text_Log.Text = String.Format("{0}\r\n{1}", message, Text_Log.Text); 
                 })
             );
+            // revisamos mensaje
+            List<string> Mensaje = new List<string>(message.ToString().Split(new char[] { ':' }));
+            Analisis_Mensaje(Mensaje);
+        }
+
+        void Analisis_Mensaje(List<string> mensaje)
+        {
+            if (mensaje.Count > 4) {
+                if (mensaje[2] == " Swap nuevo ") {
+                    Elementos++;
+                    Swap_Nuevo = (IntPtr)long.Parse(mensaje[4]);
+                    Log("Mensaje recibido nuevo. Elementos: " + Elementos);
+
+                } else if (mensaje[2] == " Swap caido ") {
+                    Elementos--;
+                    Swap_Caido = (IntPtr)long.Parse(mensaje[4]);
+                    Log("Mensaje recibido caido. Elementos: " + Elementos);
+                }
+            }
         }
         // Log para mensajes                                          
         void Log(string Mensaje)
@@ -314,8 +362,8 @@ namespace Capturador
                     try
                     {
                         Thread.Sleep(1);
-                        Log("Arribo elemento: " + SwapChain.ToString());
-                        //Arribo_Swap(SwapChain);
+                        //Log("Arribo elemento: " + SwapChain.ToString());
+                        Arribo_Swap(SwapChain);
                         if (screenshot != null && screenshot.Data != null)
                         {
                             ImagenBox.Invoke(new MethodInvoker(delegate () {
@@ -325,6 +373,7 @@ namespace Capturador
                                 ImagenBox.Image = screenshot.ToBitmap(); })
                             );
                         }
+                        // llamar nuevamente a la captura
                         Thread hilo = new Thread(new ThreadStart(Capturar));
                         hilo.Start();
                     }
@@ -349,6 +398,157 @@ namespace Capturador
                 Log("Nuevo elemento: " + Swap_In.ToString());
             }
         }
+
+
+        private void Boton_Auto_Click(object sender, EventArgs e) {
+            // Ejecutamos el proceso en hilo aparte
+            Thread h_automatico = new Thread(new ThreadStart(Automatico));
+            h_automatico.Start();
+        }
+        private void Automatico() {
+            int Reintentos = 20;
+            for (int i = 0; i < Reintentos; i++) {
+                if (!Conectado) {
+                    Thread.Sleep(1000);
+                    Boton_Connect_Click(null, null);
+                }
+            }
+            // avanzamos al segundo paso si esta conectado
+            if (Conectado)
+            {
+                // OBtener Padre
+                h_Padre = Obtener_Proceso(Text_ClassName.Text, Text_WindowName.Text);
+                // delegar      
+                Text_hwnd.Invoke(
+                new MethodInvoker(delegate () {
+                    Text_hwnd.Text = h_Padre.ToString();
+                })
+            );
+
+                //              
+                if (Elementos == 0)
+                {
+                    Log("Esperando Pantalla inicial");
+                }
+                // Esperar Elemento = 1 (ventana principal)
+                for (int i = 0; i < Reintentos; i++)
+                {
+                    Thread.Sleep(1000);
+                    if (Elementos == 1)
+                    {
+                        Log("Pantalla inicial cargada");
+                        i = Reintentos;
+                        // Pasar al siguiente paso  
+                    }
+                    if (Elementos > 1)
+                    {
+                        // Matar Swaps              
+                        Log("Swap superados, reduciendo Swaps");
+                        Matar_Swaps();
+                        i = Reintentos;
+                        Log("Pantalla inicial cargada");
+                    }
+                }
+                // 3 er modulo                      
+                if (Elementos == 1)
+                {
+                    // Extrar elemetos
+                    Thread.Sleep(1000);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (L_Check[i].Checked)
+                        {
+                            Log("Extrar Swap " + i);
+                            Extrar_Swap(i);
+                            //SetWindowPos(h_Elemento_Ext[i], (IntPtr)0, 100, 100, 300, 300, 0);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void Extrar_Swap(int Id)
+        {
+            int Elemento_previo = Elementos;
+            // Enviamos tecla               
+            Log("Send Key " + Id);
+            SendKeys.SendWait(L_TextBox_Key[Id].Text);
+            Thread.Sleep(1000);
+            // Obtener valores              
+            Log("Obtener sub procesos " + Id);
+            h_Elemento[Id] = Obtener_Sub_Proceso(h_Padre, L_TextBox_Elemento[Id].Text, Text_WindowFloat.Text);
+            h_Elemento_Ext[Id] = Obtener_Proceso(Text_WindowFloat.Text, L_TextBox_Elemento[Id].Text);
+            // Almacenar (delegando)        
+            L_TextBox_hwdn[Id].Invoke(
+                new MethodInvoker(delegate () {
+                    L_TextBox_hwdn[Id].Text = h_Elemento[Id].ToString();
+                })
+            );
+            L_TextBox_hwdn_Ext[Id].Invoke(
+                new MethodInvoker(delegate () {
+                    L_TextBox_hwdn_Ext[Id].Text = h_Elemento_Ext[Id].ToString();
+                })
+            );
+            Thread.Sleep(1000);
+            // Los valores estan obtenidos si o si
+            // Extraemos el objeto                
+            Log("Desacoplar " + Id);
+            Desacoplar(h_Elemento[Id], L_TextBox_Elemento[Id].Text, Text_WindowFloat.Text);
+            Thread.Sleep(1000);
+            // Revisar si no desacoplo            
+            if (Elementos <= Elemento_previo)
+            {
+                // bajo de elementos o no cambio (Enviar de nuevo la tecla)
+                Log("Desacople sin efecto " + Id);
+                SendKeys.SendWait(L_TextBox_Key[Id].Text);
+                Thread.Sleep(1000);
+                Desacoplar(h_Elemento[Id], L_TextBox_Elemento[Id].Text, Text_WindowFloat.Text);
+            } else
+            {
+                Log("Desacoplado " + Id);
+                // desacoplo    
+                h_Pointer[Id] = Swap_Nuevo;
+                // Guardar en texto box
+                L_TextBox_Point[Id].Invoke(
+                    new MethodInvoker(delegate () {
+                        L_TextBox_Point[Id].Text = h_Pointer[Id].ToString();
+                    })
+                );
+                // Esconder             
+                Thread.Sleep(2000);
+                Log("Mostrar elemento " + Id);
+                SetWindowPos(h_Elemento_Ext[Id], (IntPtr)0, 100, 100, 300, 300, 0);
+                Thread.Sleep(2000);
+                Log("Ocultar elemento " + Id);
+                SetWindowPos(h_Elemento_Ext[Id], (IntPtr)0, 100, 1200, 300, 300, 0);
+                Thread.Sleep(2000);
+            }
+
+        }
+        private void Matar_Swaps()
+        {
+            for (int i = 0; i < 10; i++) {
+                Log(i + " - Swaps actuales: " + Elementos);
+                Intento_Reducir_Swaps(i);
+                if (Elementos == 1) {
+                    Log("Swaps eliminados");
+                    i = 10;
+                }
+            }
+        }
+
+        private void Intento_Reducir_Swaps(int Id) {
+            int Elemento_previo = Elementos;
+            SendKeys.SendWait(L_TextBox_Key[Id].Text);
+            Thread.Sleep(1000);
+            if (Elementos >= Elemento_previo)
+            {
+                // subio de elementos o no cambio (Enviar de nuevo la tecla)
+                SendKeys.SendWait(L_TextBox_Key[Id].Text);
+                Thread.Sleep(1000);
+            }
+        }
+
 
         //Procedimientos externo (captura de windows)           
         [DllImport("user32.dll", SetLastError = true)]
@@ -394,6 +594,11 @@ namespace Capturador
         }
 
         private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Boton_GetPoint_Click(object sender, EventArgs e)
         {
 
         }
